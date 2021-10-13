@@ -1,27 +1,26 @@
-git init 					#initialize git in working directory
+git init 						#initialize git in working directory
 
-git add . 					#add everything in the working directory to git
+git add . 						#add everything in the working directory to git
 
-git status					#status of files
+git status						#status of files
 
-git remote add origin "ssh ling from github"	#links git to github repository
-git rm origin 					#removes remote repository
-git remote -v 					#checks status of linked remote repository
+git remote add origin "<<REPOSITORY LINK FROM GITHUB>>"	#links git to github repository
+git rm origin 						#removes remote repository
+git remote -v 						#checks status of linked remote repository
 
-git branch -M main				#you have to do this
+git commit -a						#commit all changes to all files
+git push origin main 					#push to master
 
-git commit -a					#commit all changes to all files
-git push origin main 				#push to master
+git pull						#pull
+git branch						#ελέγχω σε ποιο branch δουλεύω
 
-git pull					#pull
+Για να ξεκινήσω να δουλεύω
+git pull
+git checkout -b <<ΟΝΟΜΑ BRANCH>>
 
+	--ΔΟΥΛΕΥΩ ΜΕ ΤΟΝ ΚΩΔΙΚΑ--
 
-Για να ξεκινήσω να δουλέω
-git pull origin main
-git branch -M asd
-
-slkjddfs
-skljflksdf
-kjsdf
-
+git add .
+git commit -m <<"ΣΧΟΛΙΑ">>
+git push origin <<ΟΝΟΜΑ BRANCH>>
 
