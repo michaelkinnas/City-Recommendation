@@ -16,10 +16,12 @@ git push origin main 				#push to master
 git pull					#pull
 
 
-Για να ξεκινήσω να δουλέβω
-git pull
-git branch -M
+Για να ξεκινήσω να δουλέω
+git pull origin main
+git branch -M asd
 
-
+slkjddfs
+skljflksdf
+kjsdf
 
 
