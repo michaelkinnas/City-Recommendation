@@ -1,0 +1,25 @@
+git init 					#initialize git in working directory
+
+git add . 					#add everything in the working directory to git
+
+git status					#status of files
+
+git remote add origin "ssh ling from github"	#links git to github repository
+git rm origin 					#removes remote repository
+git remote -v 					#checks status of linked remote repository
+
+git branch -M main				#you have to do this
+
+git commit -a					#commit all changes to all files
+git push origin main 				#push to master
+
+git pull					#pull
+
+
+Για να ξεκινήσω να δουλέβω
+git pull
+git branch -M
+
+
+
+
