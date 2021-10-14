@@ -22,7 +22,7 @@ public class CityRecommend {
         City testing = new City(testFeatures);
         testing.testPrint();
         
-        System.out.println(dist);
+        System.out.println("Calculated distance with distance method: " + dist);
     }
     
     
