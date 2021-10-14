@@ -48,6 +48,7 @@ public class City {
         
     }
     
+    //FOR DEBUGGING ONLY
     public void testPrint() {
         System.out.println("Normalized features: " + Arrays.toString(features));
     }
