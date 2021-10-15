@@ -12,6 +12,5 @@ import java.util.ArrayList;
  * @author Michail Kinnas it22046
  */
 public interface PerceptronTraveller {
-    public ArrayList<City> recommend();
-    
+    public ArrayList<City> recommend();    
 }
