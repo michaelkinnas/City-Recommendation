@@ -10,22 +10,23 @@ import java.util.Arrays;
  *
  * @author Michail Kinnas it22046
  */
-public class City {  
+public class City {
+    //TEMP HARDCODED DATA
     private double testLatitude = (Math.random() * (90 + 90) - 90); 
     private double testLongitude = (Math.random() * (180 + 180) - 180);
     
-    private int hardFeatureMax = 10;    //THIS WILL CHANGE
-    private int hardFeatureMin = 0;     //THIS WILL CHANGE
+    private int hardFeatureMax = 10;    
+    private int hardFeatureMin = 0;     
     
     private int hardTempMax = 331;
     private int hardTempMin = 184;
+    //END OF TEMP HARDCODED DATA
     
-    //private int maxDist = 15326;      //distance between Athens and Sydney
-    private int maxDist = 20038;        //max distance between two points on planet Earth's surface (Earths circumference 40075km / 2)
-    
-    private double[] features;           
+    //private final int MAXDIST = 15326;                //distance between Athens and Sydney
+    private final int MAXDIST = 20038;                  //max distance between two points on planet Earth's surface (Earths circumference 40075km / 2)    
+    private double[] features;
 
-    public City(double[] features) {            //THIS IS STUPID BUT TEMPORARY
+    public City(double[] features) {   //THIS IS STUPID BUT TEMPORARY
         this.features = features;
         this.features[9] = this.distance(37.983810, 23.727539, testLatitude, testLongitude, 'K');
         this.features = this.normalizedFeatures(features);
@@ -39,7 +40,7 @@ public class City {
         }        
         normalizedArray[7] = featureNormalizer(features[7], hardTempMax, hardTempMin);              //case of temperature         
         normalizedArray[8] = features[8] / 100;                                                     //case of cloud coverage         
-        normalizedArray[9] = geodesicNormalizer(features[9], maxDist);                              //case of cities distance
+        normalizedArray[9] = geodesicNormalizer(features[9], MAXDIST);                              //case of cities distance        
         
         return normalizedArray;
     }    
@@ -56,7 +57,7 @@ public class City {
     Calculates distance between two sets of longitude and latitude in signed degrees format (DDD.dddd)
     Using real numbers: East-West from -180.0000 to 180.0000 and North-South from 90.0000 to -90.0000
     */
-    private static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+    private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
@@ -72,20 +73,19 @@ public class City {
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::  This function converts decimal degrees to radians             :*/
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    private static double deg2rad(double deg) {
+    private double deg2rad(double deg) {
       return (deg * Math.PI / 180.0);
     }    
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::  This function converts radians to decimal degrees             :*/
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    private static double rad2deg(double rad) {
+    private double rad2deg(double rad) {
       return (rad * 180.0 / Math.PI);
     }
     
     //FOR DEBUGGING ONLY
     public void testPrint() {
         System.out.println("Normalized features: " + Arrays.toString(features));
-        System.out.println("Random generated Latitude - Longitude: " + testLatitude + ", " + + testLongitude);
-       
+        System.out.println("Random generated Latitude - Longitude: " + testLatitude + ", " + testLongitude);       
     }
 }
