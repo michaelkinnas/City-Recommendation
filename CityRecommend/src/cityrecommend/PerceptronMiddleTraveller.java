@@ -12,9 +12,9 @@ import java.util.ArrayList;
  * @author Michail Kinnas it22046
  */
 public class PerceptronMiddleTraveller implements PerceptronTraveller{
-    double weightBias[] = {0,0,0,0,0,0,0,0,0,0}; //TO BE IMPLEMENTED, must be a real number between -1 and 1
+    double[] weightBias = {0,0,0,0,0,0,0,0,0,0}; //TO BE IMPLEMENTED, must be a real number between -1 and 1
     
-    public ArrayList<City> recommend(){
+    public ArrayList<City> recommend(double x) {
         return null; //TO BE IMPLEMENTED
     }    
 }

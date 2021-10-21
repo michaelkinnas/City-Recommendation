@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cityrecommend;
 
-import java.util.ArrayList;
-
 /**
- *
- * @author Michail Kinnas it22046
+ * 
+ * @author Sammy Guergachi <sguergachi at gmail.com>
  */
-public interface PerceptronTraveller {
-    public ArrayList<City> recommend(double x);    
+public class NewClass {
+
 }
