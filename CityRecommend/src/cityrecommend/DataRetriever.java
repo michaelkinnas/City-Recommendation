@@ -13,8 +13,8 @@ package cityrecommend;
 public class DataRetriever {
     private static final double ATHENSLAT = 33.9519347;
     private static final double ATHENSLON = -83.357567;    
-    //private final int MAXDIST = 15326;                //distance between Athens and Sydney
-    private static final int MAXDIST = 20038;                  //max distance between two points on planet Earth's surface (Earths circumference 40075km / 2)    
+    //private final int MAXDIST = 15326;                        //distance between Athens and Sydney
+    private static final int MAXDIST = 20038;                   //max distance between two points on planet Earth's surface (Earths circumference 40075km / 2)    
     
     private static final int hardFeatureMax = 10;   
     private static final int hardFeatureMin = 0;
@@ -31,6 +31,8 @@ public class DataRetriever {
     }
     
     public static double[] populateData(String cityName, String countryInitials) {
+        double tempArray[];
+        
         //to be implemented
         //all these should be returned normalized from methods inside the dataRetriever class
         //for features[0] to features[6] call dataRetriever.countWords method

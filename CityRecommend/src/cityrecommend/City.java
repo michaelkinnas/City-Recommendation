@@ -10,20 +10,26 @@ package cityrecommend;
  */
 public class City {
     private double[] features = new double[10];
-    private String cityName;
+    private String cityName;    
 
     public City(String cityName, String countryInitials) {
         this.cityName = cityName;
-        populateData(cityName, countryInitials);
+        this.features = DataRetriever.populateData(cityName, countryInitials);
     }
-    
-    private void populateData(String cityName, String countryInitials) {
-        //to be implemented
-        //all these should be returned normalized from methods inside the dataRetriever class
-        //for features[0] to features[6] call dataRetriever.countWords method
-        //for features[7] get temp from dataRetriever.getTemp method
-        //for features[8] get cloud coverage from dataRetriever.getTemp method
-        //for geatures[9] get distance to Athens from dataRetriever.getDistance method
+
+    public void setFeatures(double[] features) {
+        this.features = features;
     }
-    
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public double[] getFeatures() {
+        return features;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
 }
