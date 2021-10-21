@@ -23,20 +23,29 @@ public class DataRetriever {
     private static final int hardTempMin = 184;
     
     
-    
-    /*
-    Calculates distance between two sets of longitude and latitude in signed degrees format (DDD.dddd)
-    Using real numbers: East-West from -180.0000 to 180.0000 and North-South from 90.0000 to -90.0000
-    */
     public static double getDistance(String cityName) {
         double cityLatitude = getCityLatitude(cityName);
         double cityLongitude = getCityLongitude(cityName);
         
         return distance(ATHENSLAT, ATHENSLON, cityLatitude, cityLongitude, 'K');
     }
+    
+    public static double[] populateData(String cityName, String countryInitials) {
+        //to be implemented
+        //all these should be returned normalized from methods inside the dataRetriever class
+        //for features[0] to features[6] call dataRetriever.countWords method
+        //for features[7] get temp from dataRetriever.getTemp method
+        //for features[8] get cloud coverage from dataRetriever.getTemp method
+        //for geatures[9] get distance to Athens from dataRetriever.getDistance method
+        //return normalizedArray[];
+        return null;
+    }
             
-            
-    public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+    /*
+    Calculates distance between two sets of longitude and latitude in signed degrees format (DDD.dddd)
+    Using real numbers: East-West from -180.0000 to 180.0000 and North-South from 90.0000 to -90.0000
+    */
+    private static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
