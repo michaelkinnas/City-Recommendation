@@ -10,7 +10,7 @@ package cityrecommend;
  * 
  * @author Michail Kinnas it22046
  */
-public class dataRetriever {
+public class DataRetriever {
     private static final double ATHENSLAT = 33.9519347;
     private static final double ATHENSLON = -83.357567;    
     //private final int MAXDIST = 15326;                //distance between Athens and Sydney
