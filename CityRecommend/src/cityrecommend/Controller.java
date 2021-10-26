@@ -9,13 +9,14 @@ package cityrecommend;
  *
  * @author Michail Kinnas it22046
  */
-public class CityRecommend {
+public class Controller {
+    private static String appid = "32fc4065e28603f29c061d7064f10147";
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {  
-        City testCity = new City("Rome", "It");
+        City testCity = new City("Rome", "It", appid);
        
     }
 }
