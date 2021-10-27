@@ -20,7 +20,9 @@ public class City {
 
     public City(String cityName, String countryInitials, String appid) {
         this.cityName = cityName;
-        this.features = DataRetriever.populateData(cityName, countryInitials, appid);
+        this.features = DataRetriever.populateData(cityName, countryInitials, appid);        
+        
+        
     }
 
     public void setFeatures(double[] features) {
@@ -39,9 +41,6 @@ public class City {
         return cityName;
     }
     
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::                         INSIDE CLASS                           :*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static class DataRetriever{        
         private static final double ATHENSLAT = 33.9519347;
         private static final double ATHENSLON = -83.357567;    
@@ -63,15 +62,21 @@ public class City {
         }
 
         private static double[] populateData(String cityName, String countryInitials, String appid) {
-            double unormalizedArray[] = new double[10];
+            double unormalizedFeatures[] = new double[10];
             
             try {
                 RetrieveData(cityName, countryInitials, appid);
             } catch (IOException e) {
-            //DO NOTHING
-        }
-            
-            
+                //DO SOMETHING??
+            }
+
+            //to be implemented
+            //all these should be returned normalized from methods inside the dataRetriever class
+            //for features[0] to features[6] call dataRetriever.countWords method
+            //for features[7] get temp from dataRetriever.getTemp method
+            //for features[8] get cloud coverage from dataRetriever.getTemp method
+            //for geatures[9] get distance to Athens from dataRetriever.getDistance method
+            //return normalizedArray[];
             return null;
         }
 
@@ -145,7 +150,7 @@ public class City {
             OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
             System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
             System.out.println(city+" lat: " + weather_obj.getCoord().getLat()+" lon: " + weather_obj.getCoord().getLon());
-            MediaWiki mediaWiki_obj =  mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
+            MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
             System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract());
         }
     }
