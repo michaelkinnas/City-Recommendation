@@ -1,83 +1,85 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor
- */
 package cityrecommend;
 
+import java.util.ArrayList;
 import java.io.IOException;
 import java.net.URL;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 import weather.OpenWeatherMap;
 import wikipedia.MediaWiki;
-/**
- *
- * @author Michail Kinnas it22046
- */
+
 public class City {
-    private double[] features = new double[10];
+    private double[] normalizedFeatures = new double[10];
     private String cityName;    
 
     public City(String cityName, String countryInitials, String appid) {
         this.cityName = cityName;
-        this.features = DataRetriever.populateData(cityName, countryInitials, appid);        
-        
-        
+        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid);        
     }
 
-    public void setFeatures(double[] features) {
-        this.features = features;
+    public void setNormalizedFeatures(double[] features) {
+        this.normalizedFeatures = features;
     }
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 
-    public double[] getFeatures() {
-        return features;
+    public double[] getNormalizedFeatures() {
+        return normalizedFeatures;
     }
 
     public String getCityName() {
         return cityName;
     }
     
-    private static class DataRetriever{        
-        private static final double ATHENSLAT = 33.9519347;
-        private static final double ATHENSLON = -83.357567;    
+    private static class DataRetriever {
+        private static final double ATHENSLAT = 37.983810;
+        private static final double ATHENSLON = 23.727539;
         //private final int MAXDIST = 15326;                        //distance between Athens and Sydney
-        private static final int MAXDIST = 20038;                   //max distance between two points on planet Earth's surface (Earths circumference 40075km / 2)    
-
+        private static final int MAXDIST = 20038;
         private static final int FEATUREMAX = 10;   
         private static final int FEATUREMIN = 0;
-
         private static final int TEMPMAX = 331;
         private static final int TEMPMIN = 184;
-
-
-        private static double getDistance(String cityName) {
-            double cityLatitude = getCityLatitude(cityName);
-            double cityLongitude = getCityLongitude(cityName);
-
-            return distance(ATHENSLAT, ATHENSLON, cityLatitude, cityLongitude, 'K');
-        }
+        
+        private static final String[] KEYWORDS = new String[] {"bar","beach","mountain","museum","hotel","transport","site"}; 
 
         private static double[] populateData(String cityName, String countryInitials, String appid) {
             double unormalizedFeatures[] = new double[10];
+            double featureArr[] = new double[7];
+            double weatherArr[] = new double[3]; 
             
             try {
-                RetrieveData(cityName, countryInitials, appid);
+                featureArr = retrieveFeatureCount(cityName);
             } catch (IOException e) {
-                //DO SOMETHING??
+                //DO SOMETHING? HOW TO THROW EXCEPTION?
             }
-
-            //to be implemented
-            //all these should be returned normalized from methods inside the dataRetriever class
-            //for features[0] to features[6] call dataRetriever.countWords method
-            //for features[7] get temp from dataRetriever.getTemp method
-            //for features[8] get cloud coverage from dataRetriever.getTemp method
-            //for geatures[9] get distance to Athens from dataRetriever.getDistance method
-            //return normalizedArray[];
-            return null;
+            System.out.println("Features: " + Arrays.toString(KEYWORDS));
+            System.out.println("Count: " + Arrays.toString(featureArr));
+            
+            try {
+                weatherArr = retrieveWeatherData(cityName, countryInitials, appid);
+            } catch (IOException e) {
+                //DO SOMETHING? HOW TO THROW EXCEPTION?
+            }            
+            System.out.println("Temp: " + weatherArr[0] + ", Clouds: " + weatherArr[1] + ", Distance: " + weatherArr[2]);           
+            
+            for (int i = 0; i < 7; i++) {
+                unormalizedFeatures[i] = featureArr[i];                
+            }
+            
+            for (int i = 0; i < 3; i++) {
+                unormalizedFeatures[i+7] = weatherArr[i];
+            }
+            
+            System.out.println("Un-normalized features: " + Arrays.toString(unormalizedFeatures));
+                        
+            return normalizedFeatures(unormalizedFeatures);
+        }
+        
+        private static double getDistance(double cityLatitude, double cityLongitude) {
+            return distance(ATHENSLAT, ATHENSLON, cityLatitude, cityLongitude, 'K');
         }
 
         /*
@@ -130,22 +132,97 @@ public class City {
         private static double geodesicNormalizer(double distance, int max) {        
             return distance / max;
         }
-
-        //TO BE IMPLEMENTED
-        private static double getCityLatitude(String city) {
-            return 0;
+        
+        private static double[] retrieveWeatherData(String city, String country, String appid) throws  IOException {
+            double[] weatherArr = new double[3];
+            ObjectMapper mapper = new ObjectMapper();            
+          
+            OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
+            //System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
+            //System.out.println(city+" lat: " + weather_obj.getCoord().getLat()+" lon: " + weather_obj.getCoord().getLon());
+            
+            weatherArr[0] = weather_obj.getMain().getTemp();
+            weatherArr[1] = weather_obj.getClouds().getAll();
+            weatherArr[2] = getDistance(weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon());
+            
+            return weatherArr;
         }
-        //TO BE IMPLEMENTED
-        private static double getCityLongitude(String city) {
-            return 0;
+
+        private static double[] retrieveFeatureCount(String city) throws  IOException {
+            double[] featureArr = new double[7];
+            ObjectMapper mapper = new ObjectMapper();
+            
+            MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
+            //System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract()); //DEBUG MESSAGE
+            
+            featureArr = countWords(mediaWiki_obj);
+            
+            return featureArr;
+        }       
+        
+        private static double[] countWords(MediaWiki mediaWiki_obj) {
+            double[] wordsCount = new double[7];
+            
+            for (int i = 0; i < 7; i++) {
+                wordsCount[i] = countCriterionfCity(mediaWiki_obj.getQuery().getPages().get(0).getExtract(), KEYWORDS[i]);
+                if (wordsCount[i] > 10) {
+                    wordsCount[i] = 10;
+                }
+            }           
+            
+            return wordsCount;
         }
         
-        private static void RetrieveData(String city, String country, String appid) throws  IOException {
+        /** Counts the number of times a criterion occurs in the city wikipedia article.
+        @param cityArticle  The String of the retrieved wikipedia article.
+        @param criterion The String of the criterion we are looking for.
+        @return An integer, the number of times the criterion-string occurs in the wikipedia article.
+        */	
+        public static int countCriterionfCity(String cityArticle, String criterion) {
+            cityArticle=cityArticle.toLowerCase();
+            int index = cityArticle.indexOf(criterion);
+            int count = 0;
+            while (index != -1) {
+                count++;
+                cityArticle = cityArticle.substring(index + 1);
+                index = cityArticle.indexOf(criterion);
+            }
+            return count;
+        }
+        
+        /** Counts distinct words in the input String.
+        @param str The input String. 
+        @return An integer, the number of distinct words.
+        */
+        private static int countDistinctWords(String str) {
+            String s[]=str.split(" ");
+            ArrayList<String> list=new ArrayList<String>();
+	
+            for (int i = 1; i < s.length; i++) {
+                if (!(list.contains(s[i]))) {
+                    list.add(s[i]);
+                }
+            }
+            return list.size();
+        }	
+
+        /** Counts all words in the input String.
+        @param str The input String.
+        @return An integer, the number of all words.
+        */	
+        private static int countTotalWords(String str) {	
+            String s[]=str.split(" ");
+            return s.length;
+        }	
+        
+        
+        /*
+        private static void RetrieveData(String city, String country, String appid) throws IOException {
             /**Retrieves weather information, geotag (lan, lon) and a Wikipedia article for a given city.
             * @param city The Wikipedia article and OpenWeatherMap city. 
             * @param country The country initials (i.e. gr, it, de).
             * @param appid Your API key of the OpenWeatherMap.*/ 
-             
+            /*
             ObjectMapper mapper = new ObjectMapper(); 
             OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
             System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
@@ -153,5 +230,6 @@ public class City {
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
             System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract());
         }
+         */
     }
 }
