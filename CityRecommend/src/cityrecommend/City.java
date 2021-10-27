@@ -20,14 +20,7 @@ public class City {
 
     public City(String cityName, String countryInitials, String appid) {
         this.cityName = cityName;
-        this.features = DataRetriever.populateData(cityName, countryInitials);
-        
-        try {
-            DataRetriever.RetrieveData(cityName, countryInitials, appid);
-        } catch (IOException e) {
-            //DO NOTHING
-        }
-        
+        this.features = DataRetriever.populateData(cityName, countryInitials, appid);
     }
 
     public void setFeatures(double[] features) {
@@ -46,6 +39,9 @@ public class City {
         return cityName;
     }
     
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::                         INSIDE CLASS                           :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static class DataRetriever{        
         private static final double ATHENSLAT = 33.9519347;
         private static final double ATHENSLON = -83.357567;    
@@ -66,16 +62,16 @@ public class City {
             return distance(ATHENSLAT, ATHENSLON, cityLatitude, cityLongitude, 'K');
         }
 
-        private static double[] populateData(String cityName, String countryInitials) {
-            double tempArray[];
-
-            //to be implemented
-            //all these should be returned normalized from methods inside the dataRetriever class
-            //for features[0] to features[6] call dataRetriever.countWords method
-            //for features[7] get temp from dataRetriever.getTemp method
-            //for features[8] get cloud coverage from dataRetriever.getTemp method
-            //for geatures[9] get distance to Athens from dataRetriever.getDistance method
-            //return normalizedArray[];
+        private static double[] populateData(String cityName, String countryInitials, String appid) {
+            double unormalizedArray[] = new double[10];
+            
+            try {
+                RetrieveData(cityName, countryInitials, appid);
+            } catch (IOException e) {
+            //DO NOTHING
+        }
+            
+            
             return null;
         }
 
