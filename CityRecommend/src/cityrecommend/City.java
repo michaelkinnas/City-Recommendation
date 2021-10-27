@@ -12,9 +12,9 @@ public class City {
     private double[] normalizedFeatures = new double[10];
     private String cityName;    
 
-    public City(String cityName, String countryInitials, String appid) {
+    public City(String cityName, String countryInitials, String appid, String[] keywords) {
         this.cityName = cityName;
-        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid);        
+        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid, keywords);        
     }
 
     public void setNormalizedFeatures(double[] features) {
@@ -31,39 +31,34 @@ public class City {
 
     public String getCityName() {
         return cityName;
-    }
+    }    
     
     private static class DataRetriever {
         private static final double ATHENSLAT = 37.983810;
         private static final double ATHENSLON = 23.727539;
         //private final int MAXDIST = 15326;                        //distance between Athens and Sydney
-        private static final int MAXDIST = 20038;
+        private static final int MAXDIST = 20038;                   //max distance between two points on planet earth's surface
         private static final int FEATUREMAX = 10;   
         private static final int FEATUREMIN = 0;
         private static final int TEMPMAX = 331;
         private static final int TEMPMIN = 184;
-        
-        private static final String[] KEYWORDS = new String[] {"bar","beach","mountain","museum","hotel","transport","site"}; 
 
-        private static double[] populateData(String cityName, String countryInitials, String appid) {
+        private static double[] populateData(String cityName, String countryInitials, String appid, String[] keywords) {            
             double unormalizedFeatures[] = new double[10];
             double featureArr[] = new double[7];
             double weatherArr[] = new double[3]; 
             
             try {
-                featureArr = retrieveFeatureCount(cityName);
+                featureArr = retrieveFeatureCount(cityName, keywords);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
-            }
-            System.out.println("Features: " + Arrays.toString(KEYWORDS));
-            System.out.println("Count: " + Arrays.toString(featureArr));
+            }           
             
             try {
                 weatherArr = retrieveWeatherData(cityName, countryInitials, appid);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
-            }            
-            System.out.println("Temp: " + weatherArr[0] + ", Clouds: " + weatherArr[1] + ", Distance: " + weatherArr[2]);           
+            }      
             
             for (int i = 0; i < 7; i++) {
                 unormalizedFeatures[i] = featureArr[i];                
@@ -72,8 +67,6 @@ public class City {
             for (int i = 0; i < 3; i++) {
                 unormalizedFeatures[i+7] = weatherArr[i];
             }
-            
-            System.out.println("Un-normalized features: " + Arrays.toString(unormalizedFeatures));
                         
             return normalizedFeatures(unormalizedFeatures);
         }
@@ -148,28 +141,24 @@ public class City {
             return weatherArr;
         }
 
-        private static double[] retrieveFeatureCount(String city) throws  IOException {
-            double[] featureArr = new double[7];
+        private static double[] retrieveFeatureCount(String city, String[] keywords) throws  IOException {            
             ObjectMapper mapper = new ObjectMapper();
             
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
             //System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract()); //DEBUG MESSAGE
-            
-            featureArr = countWords(mediaWiki_obj);
-            
-            return featureArr;
+                        
+            return countWords(mediaWiki_obj, keywords);
         }       
         
-        private static double[] countWords(MediaWiki mediaWiki_obj) {
+        private static double[] countWords(MediaWiki mediaWiki_obj, String[] keywords) {
             double[] wordsCount = new double[7];
             
             for (int i = 0; i < 7; i++) {
-                wordsCount[i] = countCriterionfCity(mediaWiki_obj.getQuery().getPages().get(0).getExtract(), KEYWORDS[i]);
+                wordsCount[i] = countCriterionfCity(mediaWiki_obj.getQuery().getPages().get(0).getExtract(), keywords[i]);
                 if (wordsCount[i] > 10) {
                     wordsCount[i] = 10;
                 }
-            }           
-            
+            }            
             return wordsCount;
         }
         
@@ -213,23 +202,6 @@ public class City {
         private static int countTotalWords(String str) {	
             String s[]=str.split(" ");
             return s.length;
-        }	
-        
-        
-        /*
-        private static void RetrieveData(String city, String country, String appid) throws IOException {
-            /**Retrieves weather information, geotag (lan, lon) and a Wikipedia article for a given city.
-            * @param city The Wikipedia article and OpenWeatherMap city. 
-            * @param country The country initials (i.e. gr, it, de).
-            * @param appid Your API key of the OpenWeatherMap.*/ 
-            /*
-            ObjectMapper mapper = new ObjectMapper(); 
-            OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
-            System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
-            System.out.println(city+" lat: " + weather_obj.getCoord().getLat()+" lon: " + weather_obj.getCoord().getLon());
-            MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
-            System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract());
-        }
-         */
+        }        
     }
 }
