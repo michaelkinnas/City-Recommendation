@@ -49,7 +49,7 @@ public class City {
             double weatherArr[] = new double[3]; 
             
             try {
-                featureArr = retrieveWikiArticle(cityName, keywords);
+                featureArr = retrieveFeatureCount(cityName, keywords);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
             }           
@@ -136,8 +136,13 @@ public class City {
             
             return weatherArr;
         }
-
-        private static double[] retrieveWikiArticle(String city, String[] keywords) throws  IOException {            
+        
+        /** Creates an array with the counted keywords from the wiki page.
+        @param city The string with name of the city.
+        @param keywords The string array with the 7 keywords.
+        @return An array of size 7 with counted keywords.        
+        */
+        private static double[] retrieveFeatureCount(String city, String[] keywords) throws  IOException {            
             ObjectMapper mapper = new ObjectMapper();
             
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
