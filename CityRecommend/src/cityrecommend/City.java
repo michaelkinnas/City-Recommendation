@@ -36,8 +36,8 @@ public class City {
     private static class DataRetriever {
         private static final double ATHENSLAT = 37.983810;
         private static final double ATHENSLON = 23.727539;
-        //private final int MAXDIST = 15326;                        //distance between Athens and Sydney
-        private static final int MAXDIST = 20038;                   //max distance between two points on planet earth's surface
+        //private final int MAXDIST = 15326;                        //distance between Athens and Sydney in km
+        private static final int MAXDIST = 20038;                   //max distance between two points on planet earth's surface in km
         private static final int FEATUREMAX = 10;   
         private static final int FEATUREMIN = 0;
         private static final int TEMPMAX = 331;
@@ -49,7 +49,7 @@ public class City {
             double weatherArr[] = new double[3]; 
             
             try {
-                featureArr = retrieveFeatureCount(cityName, keywords);
+                featureArr = retrieveWikiArticle(cityName, keywords);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
             }           
@@ -69,17 +69,13 @@ public class City {
             }
                         
             return normalizedFeatures(unormalizedFeatures);
-        }
-        
-        private static double getDistance(double cityLatitude, double cityLongitude) {
-            return distance(ATHENSLAT, ATHENSLON, cityLatitude, cityLongitude, 'K');
-        }
+        }        
 
         /*
         Calculates distance between two sets of longitude and latitude in signed degrees format (DDD.dddd)
         Using real numbers: East-West from -180.0000 to 180.0000 and North-South from 90.0000 to -90.0000
         */
-        private static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        private static double calculateDistance(double lat1, double lon1, double lat2, double lon2, char unit) {
             double theta = lon1 - lon2;
             double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
             dist = Math.acos(dist);
@@ -136,12 +132,12 @@ public class City {
             
             weatherArr[0] = weather_obj.getMain().getTemp();
             weatherArr[1] = weather_obj.getClouds().getAll();
-            weatherArr[2] = getDistance(weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon());
+            weatherArr[2] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K');
             
             return weatherArr;
         }
 
-        private static double[] retrieveFeatureCount(String city, String[] keywords) throws  IOException {            
+        private static double[] retrieveWikiArticle(String city, String[] keywords) throws  IOException {            
             ObjectMapper mapper = new ObjectMapper();
             
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
@@ -177,31 +173,6 @@ public class City {
                 index = cityArticle.indexOf(criterion);
             }
             return count;
-        }
-        
-        /** Counts distinct words in the input String.
-        @param str The input String. 
-        @return An integer, the number of distinct words.
-        */
-        private static int countDistinctWords(String str) {
-            String s[]=str.split(" ");
-            ArrayList<String> list=new ArrayList<String>();
-	
-            for (int i = 1; i < s.length; i++) {
-                if (!(list.contains(s[i]))) {
-                    list.add(s[i]);
-                }
-            }
-            return list.size();
-        }	
-
-        /** Counts all words in the input String.
-        @param str The input String.
-        @return An integer, the number of all words.
-        */	
-        private static int countTotalWords(String str) {	
-            String s[]=str.split(" ");
-            return s.length;
-        }        
+        }   
     }
 }
