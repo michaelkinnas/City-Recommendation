@@ -10,9 +10,9 @@ public class City {
     private double[] normalizedFeatures = new double[10];
     private String cityName;    
 
-    public City(String cityName, String countryInitials, String appid, String[] keywords) {
+    public City(String cityName, String countryInitials, String appid, String[] keywords, boolean log) {
         this.cityName = cityName;
-        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid, keywords);        
+        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid, keywords, log);        
     }
 
     public void setNormalizedFeatures(double[] features) {
@@ -44,14 +44,14 @@ public class City {
         private static final double unnormalizedFeatures[] = new double[10]; 
         
         
-        private static double[] populateData(String cityName, String countryInitials, String appid, String[] keywords) {
+        private static double[] populateData(String cityName, String countryInitials, String appid, String[] keywords, boolean log) {
             try {
-                retrieveFeatureCount(cityName, keywords);
+                retrieveFeatureCount(cityName, keywords, log);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
             }
             try {
-                retrieveWeatherData(cityName, countryInitials, appid);
+                retrieveWeatherData(cityName, countryInitials, appid, log);
             } catch (IOException e) {
                 //DO SOMETHING? HOW TO THROW EXCEPTION?
             }           
@@ -112,26 +112,42 @@ public class City {
         }
         
         
-        private static void retrieveWeatherData(String city, String country, String appid) throws  IOException {            
+        private static void retrieveWeatherData(String city, String country, String appid, boolean log) throws  IOException {            
             ObjectMapper mapper = new ObjectMapper();            
-          
+            
+            if (log) {
+            	System.out.println("Fethcing weather data for " + city + "..."); //LOG
+            }
             OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
             //System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
             //System.out.println(city+" lat: " + weather_obj.getCoord().getLat()+" lon: " + weather_obj.getCoord().getLon());
-            
+            if (log) {
+            	System.out.println("Fetching weather data for " + city+"."); //LOG
+            }
             unnormalizedFeatures[7] = weather_obj.getMain().getTemp();
             unnormalizedFeatures[8] = weather_obj.getClouds().getAll();
-            unnormalizedFeatures[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K');            
+            unnormalizedFeatures[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K');
+            if (log) {
+            	System.out.println("Weather data for " + city + " are set.\n"); //LOG
+            }
         }
         
        
-        private static void retrieveFeatureCount(String city, String[] keywords) throws  IOException {            
+        private static void retrieveFeatureCount(String city, String[] keywords, boolean log) throws  IOException {            
             ObjectMapper mapper = new ObjectMapper();
             
+            if (log) {
+            	System.out.println("Fetching wiki page for " + city + "..."); //LOG
+            }
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
             //System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract()); //DEBUG MESSAGE
-                        
+            if (log) {
+            	System.out.println("Fetching completed. Processing..."); //LOG
+            }
             countWords(mediaWiki_obj, keywords);
+            if (log) {
+            	System.out.println("Processing of " + city + " is completed."); //LOG
+            }
         }
         
         
@@ -158,6 +174,6 @@ public class City {
                 index = cityArticle.indexOf(criterion);
             }
             return count;
-        }   
+        }
     }
 }
