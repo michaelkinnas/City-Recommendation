@@ -5,29 +5,34 @@ import org.apache.commons.lang.SerializationUtils;
 
 public class PerceptronElderTraveller implements PerceptronTraveller{
     private double[] weightBias = {-0.2,-0.3,0.6,0.8,0.7,1.0,0.6,0.1,-0.1,0.2}; //TO BE IMPLEMENTED, must be a real number between -1 and 1
-    private double bias = 0.7;
-    
+    private double bias = 0.7;    
     private ArrayList<City> recCities = new ArrayList<>();
+    
 
     public double[] getWeightBias() {
         return weightBias;
     }
+    
 
     public double getBias() {
         return bias;
     }
+    
 
     public ArrayList<City> getRecCities() {
         return recCities;
     }
+    
 
     public void setWeightBias(double[] weightBias) {
         this.weightBias = weightBias;
     }
+    
 
     public void setBias(double Bias) {
         this.bias = Bias;
     }
+    
     
     public ArrayList<City> recommend(ArrayList<City> cities) {
         for (int i = 0; i < cities.size(); i++) {
@@ -41,6 +46,7 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
         return recCities;
     }
     
+    
     private double sumVector(double[] vectorRepresantation){
         double sum = 0;
         double[] tempMatrix = (double[]) SerializationUtils.clone(vectorRepresantation);
@@ -50,6 +56,7 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
             }
         return sum += bias;
     }
+    
 
     public ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased){
         ArrayList<City> tempCities = recommend(cities);

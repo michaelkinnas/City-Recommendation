@@ -7,7 +7,7 @@ import weather.OpenWeatherMap;
 import wikipedia.MediaWiki;
 
 public class City {
-    private double[] vectorRepresentation = new double[10];
+	private double[] vectorRepresentation = new double[10];
     private String cityName;    
 
     public City(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException {
