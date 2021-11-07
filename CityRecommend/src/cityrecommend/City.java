@@ -7,29 +7,30 @@ import weather.OpenWeatherMap;
 import wikipedia.MediaWiki;
 
 public class City {
-    private double[] normalizedFeatures = new double[10];
+    private double[] vectorRepresentation = new double[10];
     private String cityName;    
 
-    public City(String cityName, String countryInitials, String appid, String[] keywords) {
+    public City(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException {
         this.cityName = cityName;
-        this.normalizedFeatures = DataRetriever.populateData(cityName, countryInitials, appid, keywords);        
+        this.vectorRepresentation = DataRetriever.populateData(cityName, countryInitials, termsVector, appid, log);        
     }
 
-    public void setNormalizedFeatures(double[] features) {
-        this.normalizedFeatures = features;
+    public void setVectorRepresentation(double[] features) {
+        this.vectorRepresentation = features;
     }
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 
-    public double[] getNormalizedFeatures() {
-        return normalizedFeatures;
+    public double[] getVectorRepresentation() {
+        return vectorRepresentation;
     }
 
     public String getCityName() {
         return cityName;
     }    
+    
     
     private static class DataRetriever {
         private static final double ATHENSLAT = 37.983810;
@@ -41,21 +42,16 @@ public class City {
         private static final int TEMPMAX = 331;
         private static final int TEMPMIN = 184;
         
-        private static final double unnormalizedFeatures[] = new double[10]; 
+        private static final double normalizedFeatures[] = new double[10]; 
         
         
-        private static double[] populateData(String cityName, String countryInitials, String appid, String[] keywords) {
-            try {
-                retrieveFeatureCount(cityName, keywords);
-            } catch (IOException e) {
-                //DO SOMETHING? HOW TO THROW EXCEPTION?
-            }
-            try {
-                retrieveWeatherData(cityName, countryInitials, appid);
-            } catch (IOException e) {
-                //DO SOMETHING? HOW TO THROW EXCEPTION?
-            }           
-            return normalizedFeatures(unnormalizedFeatures);
+        private static double[] populateData(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException {
+        	if (log) System.out.printf("Processing data for " + cityName + "...");
+        	retrieveFeatureCount(cityName, termsVector);
+        	if (log) System.out.printf("...");
+        	retrieveWeatherData(cityName, countryInitials, appid);
+        	if (log) System.out.println("done!");
+            return normalizedFeatures(normalizedFeatures);
         } 
         /*
         Calculates distance between two sets of longitude and latitude in signed degrees format (DDD.dddd)
@@ -89,16 +85,14 @@ public class City {
         
 
         private static double[] normalizedFeatures(double[] features){       
-            double[] normalizedArray = new double[10];
-
+            double[] normalizedVector = new double[10];
             for (int i = 0; i <= 6; i++) {
-                normalizedArray[i] = featureNormalizer(features[i], FEATUREMAX, FEATUREMIN);    //case of city features  
+            	normalizedVector[i] = featureNormalizer(features[i], FEATUREMAX, FEATUREMIN);    //case of city features  
             }        
-            normalizedArray[7] = featureNormalizer(features[7], TEMPMAX, TEMPMIN);              //case of temperature         
-            normalizedArray[8] = features[8] / 100;                                             //case of cloud coverage         
-            normalizedArray[9] = geodesicNormalizer(features[9], MAXDIST);                      //case of cities distance
-
-            return normalizedArray;
+            normalizedVector[7] = featureNormalizer(features[7], TEMPMAX, TEMPMIN);              //case of temperature         
+            normalizedVector[8] = features[8] / 100;                                             //case of cloud coverage         
+            normalizedVector[9] = geodesicNormalizer(features[9], MAXDIST);                     //case of cities distance
+            return normalizedVector;
         }
         
 
@@ -112,34 +106,26 @@ public class City {
         }
         
         
-        private static void retrieveWeatherData(String city, String country, String appid) throws  IOException {            
-            ObjectMapper mapper = new ObjectMapper();            
-          
+        private static void retrieveWeatherData(String city, String country, String appid) throws IOException {            
+            ObjectMapper mapper = new ObjectMapper();
             OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+appid+""), OpenWeatherMap.class);
-            //System.out.println(city+" temperature: " + (weather_obj.getMain()).getTemp());
-            //System.out.println(city+" lat: " + weather_obj.getCoord().getLat()+" lon: " + weather_obj.getCoord().getLon());
-            
-            unnormalizedFeatures[7] = weather_obj.getMain().getTemp();
-            unnormalizedFeatures[8] = weather_obj.getClouds().getAll();
-            unnormalizedFeatures[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K');            
+            normalizedFeatures[7] = weather_obj.getMain().getTemp();
+            normalizedFeatures[8] = weather_obj.getClouds().getAll();
+            normalizedFeatures[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K'); 
         }
         
        
-        private static void retrieveFeatureCount(String city, String[] keywords) throws  IOException {            
+        private static void retrieveFeatureCount(String city, String[] keywords) throws IOException {            
             ObjectMapper mapper = new ObjectMapper();
-            
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
-            //System.out.println(city+" Wikipedia article: "+mediaWiki_obj.getQuery().getPages().get(0).getExtract()); //DEBUG MESSAGE
-                        
             countWords(mediaWiki_obj, keywords);
         }
-        
-        
+                
         private static void countWords(MediaWiki mediaWiki_obj, String[] keywords) {
             for (int i = 0; i < 7; i++) {
-                unnormalizedFeatures[i] = countCriterionfCity(mediaWiki_obj.getQuery().getPages().get(0).getExtract(), keywords[i]);
-                if (unnormalizedFeatures[i] > 10) {
-                    unnormalizedFeatures[i] = 10;
+            	normalizedFeatures[i] = countCriterionfCity(mediaWiki_obj.getQuery().getPages().get(0).getExtract(), keywords[i]);
+                if (normalizedFeatures[i] > 10) {
+                	normalizedFeatures[i] = 10;
                 }
             }
         } 
@@ -158,6 +144,6 @@ public class City {
                 index = cityArticle.indexOf(criterion);
             }
             return count;
-        }   
+        }
     }
 }
