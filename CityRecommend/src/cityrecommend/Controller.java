@@ -31,5 +31,23 @@ public class Controller {
         for (int i = 0; i < cities.size(); i++) {
             System.out.println("City: " + cities.get(i).getCityName() + "\t\tfeatures: " + Arrays.toString(cities.get(i).getNormalizedFeatures()));
         }
+        
+        public City cityDistance(PerceptronTraveller pTrv) {
+            
+            double Min = 20038;
+            int Size = pTrv.getRecCities().size();
+            int Size2 = pTrv.getRecCities().get(1).getNormalizedFeatures().length;
+            
+            for (int i = 0; i < Size2; i++){
+               
+                if (pTrv.getRecCities().get(i).getNormalizedFeatures()){
+                    
+                    Min = 
+                }
+            }
+            
+            return null;
+        }
+        
     }
 }
