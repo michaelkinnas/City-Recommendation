@@ -51,5 +51,16 @@ public class Controller {
         	System.out.printf(recommendedElder.get(i).getCityName() + ", ");
         }
     }
+    public City cityDistance(PerceptronTraveller pTrv) {
+            int index =0;
+            double Min = 1;
+            for (int i = 0; i <  pTrv.getRecCities().size(); i++){
+                if (pTrv.getRecCities().get(i).getVectorRepresentation()[9] < Min){
+                    Min =  pTrv.getRecCities().get(i).getVectorRepresentation()[9];
+                    index = i;
+                }
+            }
+            return pTrv.getRecCities().get(index);
+        }
 }
     

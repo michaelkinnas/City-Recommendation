@@ -3,5 +3,7 @@ package cityrecommend;
 import java.util.ArrayList;
 
 public interface PerceptronTraveller {
-    public ArrayList<City> recommend(double x);    
+    ArrayList<City> recommend(ArrayList<City> cities); 
+    ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased);
+    ArrayList<City> getRecCities();   
 }
