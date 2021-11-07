@@ -8,21 +8,26 @@ public class PerceptronYoungTraveller implements PerceptronTraveller{
     private double bias = 0.7;
     private ArrayList<City> recCities = new ArrayList<>();
 
+    
     public double[] getWeightBias() {
         return weightBias;
     }
+    
 
     public double getBias() {
         return bias;
     }
+    
 
     public ArrayList<City> getRecCities() {
         return recCities;
     }
+    
 
     public void setWeightBias(double[] weightBias) {
         this.weightBias = weightBias;
     }
+    
 
     public void setBias(double Bias) {
         this.bias = Bias;
