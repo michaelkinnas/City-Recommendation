@@ -3,6 +3,7 @@ package cityrecommend;
 import java.io.IOException;
 import java.net.URL;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exception.WikipediaNoArcticleException;
 import weather.OpenWeatherMap;
 import wikipedia.MediaWiki;
 
@@ -10,7 +11,7 @@ public class City {
 	private double[] vectorRepresentation = new double[10];
     private String cityName;    
 
-    public City(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException {
+    public City(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException, Exception, WikipediaNoArcticleException {
         this.cityName = cityName;
         this.vectorRepresentation = DataRetriever.populateData(cityName, countryInitials, termsVector, appid, log);        
     }
@@ -45,7 +46,7 @@ public class City {
         private static final double normalizedFeatures[] = new double[10]; 
         
         
-        private static double[] populateData(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException {
+        private static double[] populateData(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException, WikipediaNoArcticleException {
         	if (log) System.out.printf("Processing data for " + cityName + "...");
         	retrieveFeatureCount(cityName, termsVector);
         	if (log) System.out.printf("...");
@@ -115,10 +116,15 @@ public class City {
         }
         
        
-        private static void retrieveFeatureCount(String city, String[] keywords) throws IOException {            
+        private static void retrieveFeatureCount(String city, String[] keywords) throws IOException, WikipediaNoArcticleException {            
             ObjectMapper mapper = new ObjectMapper();
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
-            countWords(mediaWiki_obj, keywords);
+            if (mediaWiki_obj.getQuery().getPages().get(0).getExtract() == null) {
+                throw new WikipediaNoArcticleException(city);
+            }
+            else {
+                countWords(mediaWiki_obj, keywords);
+            }
         }
                 
         private static void countWords(MediaWiki mediaWiki_obj, String[] keywords) {
