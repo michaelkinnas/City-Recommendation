@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import org.apache.commons.lang.SerializationUtils;
 
 public class PerceptronElderTraveller implements PerceptronTraveller{
-    private double[] weightBias = {-0.2,-0.3,0.6,0.8,0.7,1.0,0.6,0.1,-0.1,0.2}; //TO BE IMPLEMENTED, must be a real number between -1 and 1
-    private double bias = 0.7;    
+    private double[] weightBias = {-0.2,-0.3,0.6,0.8,0.7,1.0,0.6,0.1,-0.1,0.2};
+    private double bias = -1.7;    
     private ArrayList<City> recCities = new ArrayList<>();
     
 
@@ -63,7 +63,7 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
         for (int i = 0; i < tempCities.size(); i++) {
             if (UpLowCased){
                 tempCities.get(i).setCityName(recCities.get(i).getCityName().toUpperCase());
-            }else{
+            } else {
                 tempCities.get(i).setCityName(recCities.get(i).getCityName().toLowerCase());                
             }    
         }

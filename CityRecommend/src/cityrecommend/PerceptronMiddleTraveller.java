@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import org.apache.commons.lang.SerializationUtils;
 
 public class PerceptronMiddleTraveller implements PerceptronTraveller{
-    private double[] weightBias = {0.2,0.1,0.4,-0.2,0.3,0.5,-0.1,0.3,-0.1,0.7}; //TO BE IMPLEMENTED, must be a real number between -1 and 1
-    private double bias = 0.7;
+    private double[] weightBias = {0.2,0.1,0.4,-0.2,0.3,0.5,-0.1,0.3,-0.1,0.7};
+    private double bias = -0.7;
     private ArrayList<City> recCities = new ArrayList<>();
     
     
@@ -36,7 +36,7 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
     
     public ArrayList<City> recommend(ArrayList<City> cities) {
         for (int i = 0; i < cities.size(); i++) {
-            if (sumVector(cities.get(i).getVectorRepresentation()) > 0){
+            if (sumVector(cities.get(i).getVectorRepresentation()) > 0) {
                 recCities.add(cities.get(i));
             }
         } 

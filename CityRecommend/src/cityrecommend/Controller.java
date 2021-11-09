@@ -19,8 +19,8 @@ public class Controller {
     	//Create city objects
         ArrayList<City> cities = new ArrayList<>();
         for (int i = 0; i < CITIES.length; i++) {  
-            try{
-        	cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, APPID22046, LOG));	
+            try {
+            	cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, APPID22046, LOG));	
             }
             catch (WikipediaNoArcticleException e0) {
                 System.out.println(e0.getMessage());
@@ -40,7 +40,7 @@ public class Controller {
             ArrayList<City> recommendedYoung = young.recommend(cities, false);
             System.out.printf("\nRecommended cities for young travellers:\t");        
             for (int i = 0; i < recommendedYoung.size(); i++) {
-        	System.out.printf(recommendedYoung.get(i).getCityName() + ", ");
+            	System.out.printf(recommendedYoung.get(i).getCityName() + ", ");
             }   
             System.out.println("\nClosest city for young travellers:\t\t" + cityDistance(young).getCityName());
         } 
@@ -56,7 +56,7 @@ public class Controller {
             ArrayList<City> recommendedMiddle = middle.recommend(cities);
             System.out.printf("\nRecommended cities for middle travellers:\t");        
             for (int i = 0; i < recommendedMiddle.size(); i++) {
-        	System.out.printf(recommendedMiddle.get(i).getCityName() + ", ");
+            	System.out.printf(recommendedMiddle.get(i).getCityName() + ", ");
             }
             System.out.println("\nClosest city for middle travellers:\t\t" + cityDistance(middle).getCityName());       
         }
@@ -72,7 +72,7 @@ public class Controller {
             ArrayList<City> recommendedElder = elder.recommend(cities, true);
             System.out.printf("\nRecommended cities for elder travellers:\t");  
             for (int i = 0; i < recommendedElder.size(); i++) {
-        	System.out.printf(recommendedElder.get(i).getCityName() + ", ");
+            	System.out.printf(recommendedElder.get(i).getCityName() + ", ");
             }
             System.out.println("\nClosest city for elder travellers:\t\t" + cityDistance(elder).getCityName()); 
         }
@@ -80,15 +80,16 @@ public class Controller {
             System.out.println("No recommended cities for elder travellers");
         }
         catch (Exception e1) {
-                System.out.println("Error with added city"); 
+            System.out.println("Error with added city"); 
         } 
    }
     
+   //calculates the shortest distance between a city object and Athens 
    public static City cityDistance(PerceptronTraveller pTrv) throws IndexOutOfBoundsException {
 	   int index =0;
 	   double Min = 1;
-	   for (int i = 0; i <  pTrv.getRecCities().size(); i++){
-		   if (pTrv.getRecCities().get(i).getVectorRepresentation()[9] < Min){
+	   for (int i = 0; i <  pTrv.getRecCities().size(); i++) {
+		   if (pTrv.getRecCities().get(i).getVectorRepresentation()[9] < Min) {
 	           Min =  pTrv.getRecCities().get(i).getVectorRepresentation()[9];
 	           index = i;
 	       }

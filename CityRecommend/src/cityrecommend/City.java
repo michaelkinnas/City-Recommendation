@@ -9,28 +9,33 @@ import wikipedia.MediaWiki;
 
 public class City {
 	private double[] vectorRepresentation = new double[10];
-    private String cityName;    
+    private String cityName;
+    
 
     public City(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException, Exception, WikipediaNoArcticleException {
         this.cityName = cityName;
         this.vectorRepresentation = DataRetriever.populateData(cityName, countryInitials, termsVector, appid, log);        
     }
+    
 
     public void setVectorRepresentation(double[] features) {
         this.vectorRepresentation = features;
     }
+    
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
+    
 
     public double[] getVectorRepresentation() {
         return vectorRepresentation;
     }
+    
 
     public String getCityName() {
         return cityName;
-    }    
+    }
     
     
     private static class DataRetriever {
@@ -41,9 +46,8 @@ public class City {
         private static final int FEATUREMAX = 10;   
         private static final int FEATUREMIN = 0;
         private static final int TEMPMAX = 331;
-        private static final int TEMPMIN = 184;
-        
-        private static final double normalizedFeatures[] = new double[10]; 
+        private static final int TEMPMIN = 184;        
+        private static final double normalizedFeatures[] = new double[10];
         
         
         private static double[] populateData(String cityName, String countryInitials, String[] termsVector, String appid, boolean log) throws IOException, WikipediaNoArcticleException {
@@ -92,7 +96,7 @@ public class City {
             }        
             normalizedVector[7] = featureNormalizer(features[7], TEMPMAX, TEMPMIN);              //case of temperature         
             normalizedVector[8] = features[8] / 100;                                             //case of cloud coverage         
-            normalizedVector[9] = geodesicNormalizer(features[9], MAXDIST);                     //case of cities distance
+            normalizedVector[9] = geodesicNormalizer(features[9], MAXDIST);                      //case of cities distance
             return normalizedVector;
         }
         
@@ -121,11 +125,11 @@ public class City {
             MediaWiki mediaWiki_obj = mapper.readValue(new URL("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles="+city+"&format=json&formatversion=2"),MediaWiki.class);
             if (mediaWiki_obj.getQuery().getPages().get(0).getExtract() == null) {
                 throw new WikipediaNoArcticleException(city);
-            }
-            else {
+            } else {
                 countWords(mediaWiki_obj, keywords);
             }
         }
+        
                 
         private static void countWords(MediaWiki mediaWiki_obj, String[] keywords) {
             for (int i = 0; i < 7; i++) {
