@@ -37,7 +37,7 @@ public class Controller {
         
         //Recommended cities and closest city for young     
         try {
-            ArrayList<City> recommendedYoung = young.recommend(cities, false);
+            ArrayList<City> recommendedYoung = young.recommend(cities, true);
             System.out.printf("\nRecommended cities for young travellers:\t");        
             for (int i = 0; i < recommendedYoung.size(); i++) {
             	System.out.printf(recommendedYoung.get(i).getCityName() + ", ");
@@ -69,7 +69,7 @@ public class Controller {
   
         //Recommended cities and closest city for elder  
         try {
-            ArrayList<City> recommendedElder = elder.recommend(cities, true);
+            ArrayList<City> recommendedElder = elder.recommend(cities, false);
             System.out.printf("\nRecommended cities for elder travellers:\t");  
             for (int i = 0; i < recommendedElder.size(); i++) {
             	System.out.printf(recommendedElder.get(i).getCityName() + ", ");
