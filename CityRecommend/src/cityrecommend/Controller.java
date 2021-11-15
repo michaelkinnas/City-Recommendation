@@ -29,7 +29,7 @@ public class Controller {
 	 */
 	public static void main(String[] args) {
 		ArrayList<City> cities = new ArrayList<>();
-		HashMap<String, ArrayList<String>> citiesHash = new HashMap<>();
+		HashMap<String, ArrayList<String>> citiesMap = new HashMap<>();
 		File saveFile = new File(FILEPATH);
 
 		if (saveFile.exists()) {       
@@ -61,7 +61,7 @@ public class Controller {
 		ArrayList<City> recommendedElder = elder.recommend(cities);
 		printRecommendedCities(elder, recommendedElder);
 		printClosestCity(elder);
-
+		
 
 		System.out.println("\t\tSorted:");
 		ArrayList<City> recommendedYoungSorted = young.sortRecommendations(recommendedYoung);
@@ -70,11 +70,14 @@ public class Controller {
 		printRecommendedCities(middle, recommendedMiddleSorted);
 		ArrayList<City> recommendedElderSorted = elder.sortRecommendations(recommendedElder);
 		printRecommendedCities(elder, recommendedElderSorted);
-
-		makeHashMap(cities, citiesHash);
+		
+		
+		makeHashMap(cities, citiesMap);
+		System.out.println("\n\t\tHashMap:");
+		System.out.println(citiesMap);
 	}
 
-	//calculates the shortest distance between a city object and Athens 
+	
 	public static City cityDistance(PerceptronTraveller pTrv) throws IndexOutOfBoundsException {
 		int index =0;
 		double Min = 1;
@@ -145,7 +148,7 @@ public class Controller {
 		} catch (Exception e1) {
 			System.out.println(e1.getMessage());
 		}
-	}
+	}	
 
 	/**
 	 * Prints all cities in an arraylist
