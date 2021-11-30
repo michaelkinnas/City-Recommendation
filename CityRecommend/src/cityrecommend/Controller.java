@@ -1,8 +1,15 @@
 package cityrecommend;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import exception.WikipediaNoArcticleException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,7 +33,7 @@ public class Controller {
 
 		if (saveFile.exists()) {       
 			try { 
-				//cities = readJSON(saveFile);
+				cities = readJSON(saveFile);
 			} catch (Exception e) {
 				System.out.print(e.getMessage());
 				System.out.print(e.getStackTrace());            	
@@ -34,7 +41,7 @@ public class Controller {
 		} else {
 			try {
 				addCities(cities);
-				//writeJSON(cities, saveFile);
+				writeJSON(cities, saveFile);
 			} catch (Exception e) {
 				System.out.print(e.getMessage());
 				System.out.print(e.getStackTrace());        		
@@ -144,4 +151,33 @@ public class Controller {
 		}
 		return pTrv.getRecCities().get(index);
 	}
+        
+        /**
+         * Serialization into JSON file (write method) 
+         * @param cities
+         * @param filename
+         * @throws JsonGenerationException
+         * @throws JsonMappingException
+         * @throws IOException 
+         */
+        private static void writeJSON(ArrayList<City> cities, File filename) throws JsonGenerationException, JsonMappingException, IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.writeValue(filename, cities);
+    }
+        
+        /**
+         * Deserialization from JSON file (read method) 
+         * @param filename
+         * @return
+         * @throws JsonParseException
+         * @throws JsonMappingException
+         * @throws IOException 
+         */
+        private static ArrayList<City> readJSON(File filename) throws JsonParseException, JsonMappingException, IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayList<City> cities = mapper.readValue(filename, new TypeReference<ArrayList<City>>(){});
+            System.out.println("City read from saved file");
+            return cities;    
+    }
 }    
