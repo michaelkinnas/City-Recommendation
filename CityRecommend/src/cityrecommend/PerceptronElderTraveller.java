@@ -116,4 +116,5 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
 		Collections.sort(tempArray, geodesicCompare.reversed());
 		return tempArray;
 	}
+	
 }

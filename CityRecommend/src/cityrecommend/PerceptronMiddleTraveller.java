@@ -115,4 +115,5 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		Collections.sort(tempArray, timestampCompare);
 		return tempArray;
 	}
+	
 }
