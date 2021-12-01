@@ -20,4 +20,5 @@ public class GeodesicCompare implements Comparator<City> {
 			return 0;
 		}
 	}
+	
 }

@@ -116,5 +116,5 @@ public class PerceptronYoungTraveller implements PerceptronTraveller{
 		Collections.sort(tempArray, geodesicCompare);
 		return tempArray;
 	}
-	
+
 }
