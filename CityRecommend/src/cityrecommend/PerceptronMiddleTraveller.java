@@ -116,25 +116,3 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		return tempArray;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

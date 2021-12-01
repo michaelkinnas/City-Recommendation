@@ -117,24 +117,3 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
 		return tempArray;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
