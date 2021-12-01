@@ -61,15 +61,18 @@ public class Controller {
 		printCityNames(recommendedElder);
 		System.out.println("Closest city for elder travellers:\t\t" + cityDistance(elderPe).getCityName() + "\n");
 
-		/*
+		
 		System.out.println("\t\tSorted:");
-		ArrayList<City> recommendedYoungSorted = young.sortRecommendations(recommendedYoung);
-		printRecommendedCities(young, recommendedYoungSorted);
-		ArrayList<City> recommendedMiddleSorted = middle.sortRecommendations(recommendedMiddle);
-		printRecommendedCities(middle, recommendedMiddleSorted);
-		ArrayList<City> recommendedElderSorted = elder.sortRecommendations(recommendedElder);
-		printRecommendedCities(elder, recommendedElderSorted);
-		 */
+		ArrayList<City> recommendedYoungSorted = youngPe.sortRecommendations(recommendedYoung);
+		System.out.printf("Sorted cities for young travellers from closest to furthest:\t");
+		printCityNames(recommendedYoungSorted);
+		ArrayList<City> recommendedMiddleSorted = middlePe.sortRecommendations(recommendedMiddle);
+		System.out.printf("Sorted cities for midle travellers according to timestamp:\t");
+		printCityNames(recommendedMiddleSorted);
+		ArrayList<City> recommendedElderSorted = elderPe.sortRecommendations(recommendedElder);
+		System.out.printf("Sorted cities for elder travellers from furthest to closest:\t");
+		printCityNames(recommendedElderSorted);
+		
 
 		/*
 		makeHashMap(cities, citiesMap);
