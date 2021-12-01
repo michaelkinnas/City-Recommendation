@@ -5,5 +5,6 @@ import java.util.ArrayList;
 public interface PerceptronTraveller {
     ArrayList<City> recommend(ArrayList<City> cities); 
     ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased);
-    ArrayList<City> getRecCities();   
+    ArrayList<City> getRecCities(); 
+    ArrayList<City> sortRecommendations(ArrayList<City> recCities);
 }
