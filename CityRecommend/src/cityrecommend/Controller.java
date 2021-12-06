@@ -195,11 +195,6 @@ public class Controller {
             mapper.writeValue(filename, cities);
         }
     
-    /*it22165
-    ----DESERIALIZATION FROM JSON FILE
-    5th: 59:40, 1:04:22 for code, 1:03:07 check how json looks like
-    https://stackoverflow.com/questions/6349421/how-to-use-jackson-to-deserialise-an-array-of-objects for TypeReference
-    */
     
         /**
          * Deserialization from JSON file (read method). This method gets back ArrayList of cities objects from saved json file,
