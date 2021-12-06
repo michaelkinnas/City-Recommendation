@@ -195,7 +195,7 @@ public class Controller {
             mapper.writeValue(filename, cities);
         }
     
-    
+
         /**
          * Deserialization from JSON file (read method). This method gets back ArrayList of cities objects from saved json file,
          * where these objects are represented as strings.
