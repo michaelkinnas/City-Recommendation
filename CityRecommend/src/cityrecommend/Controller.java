@@ -41,7 +41,7 @@ public class Controller {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) {    	  	
-		ArrayList<City2> cities = new ArrayList<>();
+		ArrayList<City> cities = new ArrayList<>();
 		HashMap<String, ArrayList<String>> citiesMap = new HashMap<>();
 		File saveFile = new File(FILEPATH);
 
@@ -62,7 +62,7 @@ public class Controller {
 				Date date = new Date();
 
 				try {
-					cities.add(new City2(CITIES[i], COUNTRIES[i], TERMSVECTOR, OPEN_WEATHER_APPID_22046, FOURSQUARE_APPID_22046, LOG, date.getTime()));
+					cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, OPEN_WEATHER_APPID_22046, FOURSQUARE_APPID_22046, LOG, date.getTime()));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -86,7 +86,7 @@ public class Controller {
 
 	
 
-	for (City2 c: cities) {
+	for (City c: cities) {
 		System.out.println(c.getCityName());
 		for (int i=0; i < c.getVectorRepresentation().length; i++) {
 			System.out.printf(c.getVectorRepresentation()[i] + ", ");
