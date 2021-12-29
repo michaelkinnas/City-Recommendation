@@ -1,21 +1,60 @@
+
 package foursquare;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-public class FourSquareController{
-	@JsonProperty("results") 
-	public List<Result> getResults() { 
-		return this.results; } 
-	public void setResults(List<Result> results) { 
-		this.results = results; } 
-	List<Result> results;
-	
-	@JsonProperty("context") 
-	public Context getContext() { 
-		return this.context; } 
-	public void setContext(Context context) { 
-		this.context = context; } 
-	Context context;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "results",
+    "context"
+})
+@Generated("jsonschema2pojo")
+public class FourSquareController {
+
+    @JsonProperty("results")
+    private List<Result> results = null;
+    @JsonProperty("context")
+    private Context context;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("results")
+    public List<Result> getResults() {
+        return results;
+    }
+
+    @JsonProperty("results")
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
+
+    @JsonProperty("context")
+    public Context getContext() {
+        return context;
+    }
+
+    @JsonProperty("context")
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
 }

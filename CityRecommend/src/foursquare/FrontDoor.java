@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "longitude"
 })
 @Generated("jsonschema2pojo")
-public class Main {
+public class FrontDoor {
 
     @JsonProperty("latitude")
     private Double latitude;

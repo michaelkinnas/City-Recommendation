@@ -1,20 +1,33 @@
+
 package foursquare;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
 
-public class RelatedPlaces{
-	@JsonProperty("children") 
-	public List<Child> getChildren() { 
-		return this.children; } 
-	public void setChildren(List<Child> children) { 
-		this.children = children; } 
-	List<Child> children;
-	@JsonProperty("parent") 
-	public Parent getParent() { 
-		return this.parent; } 
-	public void setParent(Parent parent) { 
-		this.parent = parent; } 
-	Parent parent;
+})
+@Generated("jsonschema2pojo")
+public class RelatedPlaces {
+
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
 }

@@ -1,103 +1,125 @@
+
 package foursquare;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-public class Location{
-	@JsonProperty("address") 
-	public String getAddress() { 
-		return this.address; } 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "address",
+    "country",
+    "dma",
+    "locality",
+    "neighborhood",
+    "postcode",
+    "region"
+})
+@Generated("jsonschema2pojo")
+public class Location {
 
-	public void setAddress(String address) { 
-		this.address = address; } 
-	String address;
+    @JsonProperty("address")
+    private String address;
+    @JsonProperty("country")
+    private String country;
+    @JsonProperty("dma")
+    private String dma;
+    @JsonProperty("locality")
+    private String locality;
+    @JsonProperty("neighborhood")
+    private List<String> neighborhood = null;
+    @JsonProperty("postcode")
+    private String postcode;
+    @JsonProperty("region")
+    private String region;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	@JsonProperty("country") 
-	public String getCountry() { 
-		return this.country; } 
+    @JsonProperty("address")
+    public String getAddress() {
+        return address;
+    }
 
-	public void setCountry(String country) { 
-		this.country = country; } 
-	String country;
+    @JsonProperty("address")
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	@JsonProperty("cross_street") 
-	public String getCross_street() { 
-		return this.cross_street; } 
+    @JsonProperty("country")
+    public String getCountry() {
+        return country;
+    }
 
-	public void setCross_street(String cross_street) { 
-		this.cross_street = cross_street; } 
-	String cross_street;
+    @JsonProperty("country")
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-	@JsonProperty("locality") 
-	public String getLocality() { 
-		return this.locality; } 
+    @JsonProperty("dma")
+    public String getDma() {
+        return dma;
+    }
 
-	public void setLocality(String locality) { 
-		this.locality = locality; } 
-	String locality;
+    @JsonProperty("dma")
+    public void setDma(String dma) {
+        this.dma = dma;
+    }
 
-	@JsonProperty("region") 
-	public String getRegion() { 
-		return this.region; } 
+    @JsonProperty("locality")
+    public String getLocality() {
+        return locality;
+    }
 
-	public void setRegion(String region) { 
-		this.region = region; } 
-	String region;
+    @JsonProperty("locality")
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
 
-	@JsonProperty("admin_region") 
-	public String getAdmin_region() { 
-		return this.admin_region; } 
+    @JsonProperty("neighborhood")
+    public List<String> getNeighborhood() {
+        return neighborhood;
+    }
 
-	public void setAdmin_region(String admin_region) { 
-		this.admin_region = admin_region; } 
-	String admin_region;
+    @JsonProperty("neighborhood")
+    public void setNeighborhood(List<String> neighborhood) {
+        this.neighborhood = neighborhood;
+    }
 
-	@JsonProperty("post_town") 
-	public String getPost_town() { 
-		return this.post_town; } 
+    @JsonProperty("postcode")
+    public String getPostcode() {
+        return postcode;
+    }
 
-	public void setPost_town(String post_town) { 
-		this.post_town = post_town; } 
-	String post_town;
+    @JsonProperty("postcode")
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
 
-	@JsonProperty("address_extended") 
-	public String getAddress_extended() { 
-		return this.address_extended; } 
+    @JsonProperty("region")
+    public String getRegion() {
+        return region;
+    }
 
-	public void setAddress_extended(String address_extended) { 
-		this.address_extended = address_extended; } 
-	String address_extended;
+    @JsonProperty("region")
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
-	@JsonProperty("postcode") 
-	public String getPostcode() { 
-		return this.postcode; } 
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-	public void setPostcode(String postcode) { 
-		this.postcode = postcode; } 
-	String postcode;
-	
-	@JsonProperty("dma") 
-	public String getDma() { 
-		return this.dma; } 
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
-	public void setDma(String dma) { 
-		this.dma = dma; } 
-	String dma;
-	
-	@JsonProperty("po_box") 
-	public String getPo_box() { 
-		return this.po_box; } 
-
-	public void setPo_box(String po_box) { 
-		this.po_box = po_box; } 
-	String po_box;
-
-	@JsonProperty("neighborhood") 
-	public List<String> getNeighborhood() { 
-		return this.neighborhood; } 
-
-	public void setNeighborhood(List<String> neighborhood) { 
-		this.neighborhood = neighborhood; } 
-	List<String> neighborhood;
 }
