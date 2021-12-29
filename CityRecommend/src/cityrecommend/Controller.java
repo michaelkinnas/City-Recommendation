@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import exception.WikipediaNoArcticleException;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Controller {
-	private static final String APPID22046 = "32fc4065e28603f29c061d7064f10147"; //id of 22046    
+	
+	private static final String OPEN_WEATHER_APPID_22046 = "32fc4065e28603f29c061d7064f10147";
+	private static final String FOURSQUARE_APPID_22046 = "fsq3V4uGPDvrRFXcv6I2sgiuT85a2KdNFva9nW0yBmfO5c0=";
+	
+	
 	private static final String[] TERMSVECTOR = new String[] {"bar","beach","restaurant","museum","hotel","transport","temple"};
 	private static final String[] CITIES = new String[] {"Stockholm", "Tripei", "Los Angeles", "Glasgow", "Tokyo", "Paris", "Rhodes", "Rhodes"};
 	private static final String[] COUNTRIES = new String[] {"SE", "NO", "US", "GB", "JP", "FR", "GR", "GR"};
@@ -99,12 +102,9 @@ public class Controller {
 				if ((found = alreadyExists(CITIES[i], cities)) > 0) {
 					System.out.println("A City with the name \"" + cities.get(found).getCityName() + "\" has already been added on " + cities.get(found).getTimestamp());
 				} else {        		   
-					cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, APPID22046, LOG, date.getTime()));	
+					cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, OPEN_WEATHER_APPID_22046, FOURSQUARE_APPID_22046, LOG, date.getTime()));	
 				}        	   
-			}
-			catch (WikipediaNoArcticleException e0) {
-				System.out.println(e0.getMessage());
-			}
+			}			
 			catch (Exception e1) {             
 				System.out.println(e1.getMessage());
 			}
