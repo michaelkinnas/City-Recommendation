@@ -7,8 +7,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import exceptions.AmadeusNoCountryException;
-import exceptions.OpenWeatherNoCityException;
+import exceptions.AmadeusErrorException;
+import exceptions.FoursquareNoCityException;
+import exceptions.OpenWeatherCityNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,28 +25,22 @@ public class Controller {
 
 
 	private static final String[] TERMSVECTOR = new String[] {"bar","beach","restaurant","museum","hotel","transport","temple"};
-	//private static final String[] CITIES = new String[] {"Stockholm",  "Glasgow", "Tokyo", "Paris", "Rhodes", "Rhodes"};
-	//private static final String[] COUNTRIES = new String[] {"SE", "NO", "US", "GB", "JP", "FR", "GR", "GR"};
+	private static final String[] CITIES = new String[] {"Stockholm",  "Glasgow", "Tokyo", "Paris", "Rhodes", "Rhodes"};
+	private static final String[] COUNTRIES = new String[] {"SE",  "GB", "JP", "FR", "GR", "GR"};
 
-	private static final String[] CITIES = new String[] {"Athens", "Athens"};
-	private static final String[] COUNTRIES = new String[] {"", "US"};
+	//private static final String[] CITIES = new String[] {"Athens", "Athens"};
+	//private static final String[] COUNTRIES = new String[] {"", "US"};
 
-	private static final boolean LOG = true; // set to true to turn on status logs print outs in the terminal
+
 	private static final String FILEPATH = "save01.json";
 
-	/**
-	 * 
-	 * @param args
-	 * @throws AmadeusNoCountryException 
-	 * @throws InterruptedException 
-	 * @throws IOException 
-	 */
+	
 	public static void main(String[] args) {    	  	
 		ArrayList<City> cities = new ArrayList<>();
 		HashMap<String, ArrayList<String>> citiesMap = new HashMap<>();
 		File saveFile = new File(FILEPATH);
 
-		if (saveFile.exists()) {       
+		if (saveFile.exists()) {
 			try { 
 				//cities = readJSON(saveFile);
 			} catch (Exception e) {
@@ -62,19 +57,21 @@ public class Controller {
 				Date date = new Date();
 
 				try {
-					cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, OPEN_WEATHER_APPID_22046, FOURSQUARE_APPID_22046, LOG, date.getTime()));
+					cities.add(new City(CITIES[i], COUNTRIES[i], TERMSVECTOR, OPEN_WEATHER_APPID_22046, FOURSQUARE_APPID_22046, date.getTime()));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (AmadeusNoCountryException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (OpenWeatherNoCityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
+				} catch (AmadeusErrorException e) {
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
+				} catch (OpenWeatherCityNotFoundException e) {
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
+				} catch (FoursquareNoCityException e) {
+					System.out.println(e.getMessage());
 				}
 
 				// TODO Auto-generated catch block
@@ -92,8 +89,8 @@ public class Controller {
 			System.out.printf(c.getVectorRepresentation()[i] + ", ");
 		}
 		System.out.println();
-		System.out.println(c.getCountryCode());
-		System.out.println(c.getCovidData().getData().getDiseaseRiskLevel());
+		
+		System.out.println("Covid risk: " + c.getCovidData().getData().getDiseaseRiskLevel());
 		System.out.println();
 	}
 
@@ -211,7 +208,7 @@ public static City cityDistance(PerceptronTraveller pTrv) throws IndexOutOfBound
  * @param citiesHashMap is the HashMap where cities are added
  */
 public static void makeHashMap(ArrayList<City> cities, HashMap<String, ArrayList<String>> citiesHashMap) {
-	SimpleDateFormat date = new SimpleDateFormat("EEEE dd/MM/yyyy 'at' HH:mm:ss ");
+	SimpleDateFormat date = new SimpleDateFormat("EEEE");
 	for (City city : cities) {
 		String key = date.format(city.getTimestamp());
 		if (!citiesHashMap.containsKey(key)) {

@@ -1,6 +1,10 @@
 
 package exceptions;
-
+/**
+ * 
+ * @author it22046
+ *
+ */
 public class FoursquareNoCityException extends Exception {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +18,6 @@ public class FoursquareNoCityException extends Exception {
 	
 	public String getMessage() {
 		
-		return "There is not any city with the name "+cityName+".";
+		return "Error retrieveing data from "+cityName+".";
 	}
 }
