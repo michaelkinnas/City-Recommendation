@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "exemptions",
     "bannedArea",
     "borderBan"
+   
 })
 
 public class Entry {

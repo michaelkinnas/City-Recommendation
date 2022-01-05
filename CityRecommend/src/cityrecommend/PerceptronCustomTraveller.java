@@ -3,62 +3,67 @@ package cityrecommend;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import comparators.TimestampCompare;
+import comparators.GeodesicCompare;
 
-public class PerceptronMiddleTraveller implements PerceptronTraveller{
-    private double[] weightBias = {0.2,0.1,0.4,-0.2,0.3,0.5,-0.1,0.3,-0.1,0.7};
-   // private double bias = -1.13;
-    private double bias = 0;
-    private ArrayList<City> recCities = new ArrayList<>();
-   
-    
-    /**
+public class PerceptronCustomTraveller implements PerceptronTraveller{
+	private double[] weightBias = new double[10];
+	private double bias = 0;    
+	private ArrayList<City> recCities = new ArrayList<>();
+	
+	public PerceptronCustomTraveller(double[] weights) {
+		this.weightBias = weights;
+	}
+	
+	
+	
+
+	/**
 	 * Retrieves an Array.
 	 * @return  weightBias Array.
 	 */
-    public double[] getWeightBias() {
-        return weightBias;
-    }
-    
-    /**
+	public double[] getWeightBias() {
+		return weightBias;
+	}
+
+	/**
 	 * Retrieves a variable.
 	 * @return Variable bias.
 	 */
-    public double getBias() {
-        return bias;
-    }
-    
-    /**
+	public double getBias() {
+		return bias;
+	}
+
+	/**
 	 * Retrieves an ArrayList.
 	 * @return ArrayList with City Objects.
 	 */
-    public ArrayList<City> getRecCities() {
-        return recCities;
-    }
-    
-    /**
+	public ArrayList<City> getRecCities() {
+		return recCities;
+	}
+
+	/**
 	 * Sets the value of a variable.
 	 * @param Array with weights.
 	 */
-    public void setWeightBias(double[] weightBias) {
-        this.weightBias = weightBias;
-    }
-    
-    /**
+	public void setWeightBias(double[] weightBias) {
+		this.weightBias = weightBias;
+	}
+
+	/**
 	 * Sets the value of a variable.
 	 * @param Variable Bias.
 	 */
-    public void setBias(double Bias) {
-        this.bias = Bias;
-    }
-    
-    /**
+	public void setBias(double Bias) {
+		this.bias = Bias;
+	}
+
+	/**
 	 * Differentiates the Objects of an ArrayList and puts the Objects needed on another ArrayList.
 	 * @param An ArraList of City Objects.
 	 * @return An ArraList of City Objects.
 	 */
-    public ArrayList<City> recommend(ArrayList<City> cities) {
-    	ArrayList<City> tempArray = new ArrayList<>();
+	public ArrayList<City> recommend(ArrayList<City> cities) {
+		ArrayList<City> tempArray = new ArrayList<>();
 		double score = 0;
 		for (int i = 0; i < cities.size(); i++) {
 			tempArray.add(new City(cities.get(i)));
@@ -72,18 +77,18 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		}
 		return recCities;
 	}
-    
-    /**
+
+	/**
 	 * Multiplies two Arrays with each other and adds the results of the multiplication  .
 	 * @param vectorRepresantation: Array with data for City objects.
 	 * @return A variable with the result of some mathematical operations.
 	 */
-    private double sumVector(double[] vectorRepresantation){
+	private double sumVector(double[] vectorRepresantation){
 		double sum = 0;
 		double[] tempMatrix = new double[vectorRepresantation.length];
 		for (int i = 0; i < vectorRepresantation.length; i++ ) {
 			tempMatrix[i] = vectorRepresantation[i];
-		}	
+		}
 		for (int i = 0; i < tempMatrix.length; i++){
 			tempMatrix[i] = tempMatrix[i] * weightBias[i];
 			sum += tempMatrix[i];
@@ -91,14 +96,14 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		
 		return sum += bias;
 	}
-    
-    /**
-     * Turns the name attribute of objects in given ArrayList to lowercase or uppercase.
+
+	/**
+	 * Turns the name attribute of objects in given ArrayList to lowercase or uppercase.
 	 * @param cities: An ArrayList of City Objects.
 	 * @param UpLowCased: Variable signifying type(lowercase or upercase) of letterform.
 	 * @return An ArrayList of City Objects.
 	 */
-    public ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased){
+	public ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased){
 		ArrayList<City> tempCities = recommend(cities);
 		for (int i = 0; i < tempCities.size(); i++) {
 			if (UpLowCased){
@@ -109,7 +114,7 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		}
 		return tempCities;
 	}
-    /**
+	/**
 	 * Sorts an ArrayList using a Comparator class.
 	 * @param An ArrayList of City Objects.
 	 * @return An ArrayList of City Objects.
@@ -119,8 +124,9 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 		for (int i = 0; i < recCities.size(); i++) {
 			tempArray.add(new City(recCities.get(i)));
 		}
-		TimestampCompare timestampCompare = new TimestampCompare();
-		Collections.sort(tempArray, timestampCompare);
+		GeodesicCompare geodesicCompare = new GeodesicCompare();
+		Collections.sort(tempArray, geodesicCompare.reversed());
 		return tempArray;
-	}	
+	}
+
 }

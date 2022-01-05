@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import cityrecommend.City;
 
-public class GeodesicCompare implements Comparator<City> {
+public class ScoreCompare implements Comparator<City> {
 	/**
 	 * @param o1 Object of City type.
 	 * @param o2 Object of City type.
@@ -12,9 +12,9 @@ public class GeodesicCompare implements Comparator<City> {
 	 */
 	@Override
 	public int compare(City o1, City o2) {
-		if (o1.getVectorRepresentation()[9] > o2.getVectorRepresentation()[9]) {
+		if (o1.getScore() < o2.getScore()) {
 			return 1;
-		} else if (o1.getVectorRepresentation()[9] < o2.getVectorRepresentation()[9]) {
+		} else if (o1.getScore() > o2.getScore()) {
 			return -1;
 		} else {
 			return 0;

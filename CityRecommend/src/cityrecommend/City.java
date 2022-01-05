@@ -25,15 +25,21 @@ public class City {
 	//private static final int FEATUREMAX = 10;   
 	//private static final int FEATUREMIN = 0;
 	private static final int TEMPMAX = 331;
-	private static final int TEMPMIN = 184;        
-
-
+	private static final int TEMPMIN = 184;
+	
+	private String owappid;
+	private String fsappid;
+	
+	private String[] terms;
 
 	private String cityName;
 	private String countryCode;
 	private double[] vectorRepresentation = new double[10];
 	private long timestamp;	
 	private AmadeusController covidData;
+	private double score;
+	
+
 
 	//Required to read from json file
 	public City() {
@@ -46,56 +52,70 @@ public class City {
 	 */
 	public City(City original) {
 		this.cityName = original.cityName;
+		this.countryCode = original.countryCode;
 		this.vectorRepresentation = original.vectorRepresentation;
-		this.timestamp = original.timestamp;		
+		this.timestamp = original.timestamp;
+		this.covidData = original.covidData;
+		this.terms = original.terms;
+		this.owappid = original.owappid;
+		this.fsappid = original.fsappid;
+		this.score = original.score;
 	}
-	
+
 	/**
 	 * Main constructor
-	 * @param cityName
-	 * @param countryInitials
-	 * @param termsVector
-	 * @param owappid
-	 * @param fsapid
-	 * @param timestamp
+	 * @author it22046
+	 * @param String, the name of a city
+	 * @param String, the country code of the country of the city in ISO 3166 format (XX)
+	 * @param A String array for the terms or keywords of places to get ratings for
+	 * @param A String with the APPID key for the open weather API
+	 * @param A String with the APPID for the foursquare API
+	 * @param A long, a timestamp of when the object is created
 	 * @throws IOException
 	 * @throws InterruptedException
 	 * @throws AmadeusErrorException
 	 * @throws OpenWeatherCityNotFoundException
 	 * @throws FoursquareNoCityException
 	 */
-	public City(String cityName, String countryInitials, String[] termsVector, String owappid, String fsapid, long timestamp) throws IOException, InterruptedException, AmadeusErrorException, OpenWeatherCityNotFoundException, FoursquareNoCityException {
-		System.out.print("Procesing " + cityName + " ");
-		this.cityName = cityName;		
+	public City(String cityName, String countryCode, String[] terms, String owappid, String fsappid, long timestamp) throws IOException, InterruptedException, AmadeusErrorException, OpenWeatherCityNotFoundException, FoursquareNoCityException {
+		this.score = 0;
+		this.cityName = cityName;
+		this.countryCode = countryCode;
 		this.timestamp = timestamp;
-		retrieveWeatherData(cityName, countryInitials, owappid);
-		System.out.print( this.countryCode + ", ");
-		System.out.print("please wait...");
-		//retrieveFeatureScore(cityName, this.countryCode, termsVector, fsapid);
-		retrieveCovidData(this.countryCode);
-		normalise();
-		System.out.println("done!");
+		this.terms = terms;
+		this.owappid = owappid;
+		this.fsappid = fsappid;
+		
+		
+		retrieveWeatherData();
+		//System.out.print( this.countryCode + ", ");
+		//System.out.print("please wait...");
+		//retrieveFeatureScore();
+		//retrieveCovidData();
+		//normalise();
+		//System.out.println("done!");
 	}
 
 
 
 	/**
-	 * Retrieves Covid data for a coyntry using the Amadeus API
+	 * Retrieves Covid data for a country using the Amadeus API
 	 * @author it22046
 	 * @param String, a country code using ISO 3166 format (XX)
 	 * @throws IOException
 	 * @throws InterruptedException
 	 * @throws AmadeusErrorException
 	 */
-	private void retrieveCovidData(String countryInitials) throws IOException, InterruptedException, AmadeusErrorException {
-		//Get amadeus token
+	public void retrieveCovidData() throws IOException, InterruptedException, AmadeusErrorException {		
 		//String client_id_22046 = "IAAOZ01yvqsGryfjLV3M2huurSACX6sr";
-		//String client_secret_22046 = "TY2OztMIIaDMRMUx";
+		//String client_secret_22046 = "TY2OztMIIaDMRMUx";			
 		String client_id_22039 = "oUH4ATXGGKxJZlLOTm3fODGJTSnAfhzG";
 		String client_secret_22039 = "KH4EL4AmhjepN0Bx";
 
 		String client_id = client_id_22039;
 		String client_secret = client_secret_22039;
+
+		Thread.sleep(150);
 
 		HttpRequest requestToken = HttpRequest.newBuilder()
 				.uri(URI.create("https://test.api.amadeus.com/v1/security/oauth2/token"))
@@ -107,30 +127,32 @@ public class City {
 		ObjectMapper mapper = new ObjectMapper();
 		AmAuth amadeusAuthFields = mapper.readValue(responseToken.body(), AmAuth.class);		
 		String AmadeusAuthToken = amadeusAuthFields.getAccessToken();
-		
+
 		//System.out.println(AmadeusAuthToken);
-		
+
 		//for debugging
 		//String coyntryCode = countryInitials;
 		//String coyntryCode = "DD";
 
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=" + countryInitials))
+				.uri(URI.create("https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=" + this.countryCode))
 				.header("Authorization", "Bearer " + AmadeusAuthToken)
 				.build();
 		HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());		
-		
+
 		if (response.body().contains("errors")) {
-			throw new AmadeusErrorException(countryInitials);
+			throw new AmadeusErrorException(this.countryCode);
 		}				
 		ObjectMapper mapper2 = new ObjectMapper();
-		this.covidData = mapper2.readValue(response.body(), AmadeusController.class);			
-	}
+		this.covidData = mapper2.readValue(response.body(), AmadeusController.class);	
 
+	}
 	
-	public boolean equals(City city) {    	
-		return (city.getCityName().equals(this.cityName) && city.getCountryCode().equals(this.countryCode));
-	}    
+	
+	@Override
+	public boolean equals(Object o) {    	
+		return (((City) o).getCityName().equals(this.cityName) && ((City) o).getCountryCode().equals(this.countryCode));
+	}
 
 
 	/**
@@ -165,7 +187,7 @@ public class City {
 	private double deg2rad(double deg) {
 		return (deg * Math.PI / 180.0);
 	}
-	
+
 	/**
 	 * Helper to calculateDistance.
 	 * @param Double. Radians
@@ -185,14 +207,14 @@ public class City {
 	 * @throws InterruptedException 
 	 * @throws OpenWeatherCityNotFoundException 
 	 */
-	private void retrieveWeatherData(String city, String country, String owappid) throws IOException, InterruptedException, OpenWeatherCityNotFoundException {            
+	private void retrieveWeatherData() throws IOException, InterruptedException, OpenWeatherCityNotFoundException {            
 		ObjectMapper mapper = new ObjectMapper();
 		String requestURL;
 		//OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+owappid+""), OpenWeatherMap.class);
-		if (country == null) {
-			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID="+owappid+"";
+		if (this.countryCode == null) {
+			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+"&APPID="+this.owappid+"";
 		} else {
-			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+owappid+"";
+			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+","+this.countryCode+"&APPID="+this.owappid+"";
 		}
 
 		HttpRequest request = HttpRequest.newBuilder()
@@ -205,7 +227,7 @@ public class City {
 
 		HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.body().contains("404")) {
-			throw new OpenWeatherCityNotFoundException(city);
+			throw new OpenWeatherCityNotFoundException(this.cityName);
 		}
 		OpenWeatherMap weather_obj = mapper.readValue(response.body(), OpenWeatherMap.class);
 		countryCode = weather_obj.getSys().getCountry();
@@ -243,16 +265,16 @@ public class City {
 				.method("GET", HttpRequest.BodyPublishers.noBody())
 				.build();
 		HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-		
+
 		if (response.body().contains("message")) {
 			throw new FoursquareNoCityException(location);
 		}
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		FourSquareController fields = mapper.readValue(response.body(), FourSquareController.class);
 		return fields;		
 	}
-	
+
 	/**
 	 * Fetches specific venue popularity or rating values using the foursquare API. 
 	 * @author it22046
@@ -279,7 +301,7 @@ public class City {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Populates the first 7 terms with the coresponding value rating from 0.0 to 10.0
 	 * @author it22046
@@ -290,12 +312,12 @@ public class City {
 	 * @throws InterruptedException
 	 * @throws FoursquareNoCityException 
 	 */
-	private void retrieveFeatureScore(String cityName, String countryInitials, String[] termsVector, String fsappid) throws IOException, InterruptedException, FoursquareNoCityException {			
-		for (int i = 0; i < termsVector.length; i++) {
-			this.vectorRepresentation[i] = calculateFeatureScoreByRating(cityName, countryInitials, termsVector[i], fsappid);			
-		}			
+	public void retrieveFeatureScore() throws IOException, InterruptedException, FoursquareNoCityException {			
+		for (int i = 0; i < this.terms.length; i++) {
+			this.vectorRepresentation[i] = calculateFeatureScoreByRating(this.cityName, this.countryCode, this.terms[i], this.fsappid);			
+		}		
 	}
-	
+
 	/**
 	 * Fetches rating values from the square API for each term and calculates the average.
 	 * The result is a double from 0.0 to 10.0
@@ -333,7 +355,8 @@ public class City {
 	 * @param Double array. The city features.
 	 * @return Double array. The normalized vector.
 	 */
-	private void normalise() {		
+	public void normalise() {		
+		
 		for (int i =0; i < 7; i++) {
 			this.vectorRepresentation[i] = this.vectorRepresentation[i] / 10;
 		}
@@ -354,7 +377,13 @@ public class City {
 		return (feature - min) / (max - min);
 	}	
 
-
+	
+	/**
+	 * Setters and getters below this point
+	 * 
+	 */
+	
+	
 	public String getCityName() {
 		return cityName;
 	}
@@ -386,4 +415,49 @@ public class City {
 	public String getCountryCode() {
 		return this.countryCode;
 	}
+
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	public String getOwappid() {
+		return owappid;
+	}
+
+	public void setOwappid(String owappid) {
+		this.owappid = owappid;
+	}
+
+	public String getFsappid() {
+		return fsappid;
+	}
+
+	public void setFsappid(String fsappid) {
+		this.fsappid = fsappid;
+	}
+
+	public String[] getTerms() {
+		return terms;
+	}
+
+	public void setTerms(String[] terms) {
+		this.terms = terms;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public void setCovidData(AmadeusController covidData) {
+		this.covidData = covidData;
+	}
+	
+	
+	
+	
+
 }

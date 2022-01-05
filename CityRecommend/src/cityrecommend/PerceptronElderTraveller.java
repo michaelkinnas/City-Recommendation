@@ -7,8 +7,10 @@ import comparators.GeodesicCompare;
 
 public class PerceptronElderTraveller implements PerceptronTraveller{
 	private double[] weightBias = {-0.2,-0.3,0.6,0.8,0.7,1.0,0.6,0.1,-0.1,0.2};
-	private double bias = -1.7;    
+	//private double bias = -2.26;  
+	private double bias = 0;
 	private ArrayList<City> recCities = new ArrayList<>();
+	
 
 	/**
 	 * Retrieves an Array.
@@ -57,14 +59,17 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
 	 */
 	public ArrayList<City> recommend(ArrayList<City> cities) {
 		ArrayList<City> tempArray = new ArrayList<>();
+		double score = 0;
 		for (int i = 0; i < cities.size(); i++) {
 			tempArray.add(new City(cities.get(i)));
 		}
 		for (int i = 0; i < tempArray.size(); i++) {
-			if (sumVector(tempArray.get(i).getVectorRepresentation()) > 0){
+			score = sumVector(tempArray.get(i).getVectorRepresentation());
+			if (score > 0){
+				tempArray.get(i).setScore(score);
 				recCities.add(tempArray.get(i));
 			}
-		} 
+		}
 		return recCities;
 	}
 
@@ -83,6 +88,7 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
 			tempMatrix[i] = tempMatrix[i] * weightBias[i];
 			sum += tempMatrix[i];
 		}
+		
 		return sum += bias;
 	}
 
