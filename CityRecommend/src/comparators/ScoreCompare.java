@@ -13,9 +13,9 @@ public class ScoreCompare implements Comparator<City> {
 	@Override
 	public int compare(City o1, City o2) {
 		if (o1.getScore() < o2.getScore()) {
-			return 1;
-		} else if (o1.getScore() > o2.getScore()) {
 			return -1;
+		} else if (o1.getScore() > o2.getScore()) {
+			return 1;
 		} else {
 			return 0;
 		}

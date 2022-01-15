@@ -21,24 +21,20 @@ public class City {
 	private static final double ATHENSLAT = 37.983810;
 	private static final double ATHENSLON = 23.727539;
 	//private final int MAXDIST = 15326;                        //distance between Athens and Sydney in km
-	private static final int MAXDIST = 20038;                   //max distance between two points on planet earth's surface in km
-	//private static final int FEATUREMAX = 10;   
-	//private static final int FEATUREMIN = 0;
+	private static final int MAXDIST = 20038;                 //max distance between two points on planet earth's surface in km
 	private static final int TEMPMAX = 331;
 	private static final int TEMPMIN = 184;
-	
-	private String owappid;
-	private String fsappid;
-	
-	private String[] terms;
 
 	private String cityName;
 	private String countryCode;
+	
+	private String[] terms;
 	private double[] vectorRepresentation = new double[10];
 	private long timestamp;	
 	private AmadeusController covidData;
-	private double score;
 	
+	private double score;
+	private int dataSource; //0: not processesed, 1: default data, 2: custom data
 
 
 	//Required to read from json file
@@ -56,10 +52,9 @@ public class City {
 		this.vectorRepresentation = original.vectorRepresentation;
 		this.timestamp = original.timestamp;
 		this.covidData = original.covidData;
-		this.terms = original.terms;
-		this.owappid = original.owappid;
-		this.fsappid = original.fsappid;
+		this.terms = original.terms;		
 		this.score = original.score;
+		this.dataSource = original.dataSource;
 	}
 
 	/**
@@ -77,23 +72,14 @@ public class City {
 	 * @throws OpenWeatherCityNotFoundException
 	 * @throws FoursquareNoCityException
 	 */
-	public City(String cityName, String countryCode, String[] terms, String owappid, String fsappid, long timestamp) throws IOException, InterruptedException, AmadeusErrorException, OpenWeatherCityNotFoundException, FoursquareNoCityException {
+	public City(String cityName, String countryCode, String[] terms, long timestamp) throws IOException, InterruptedException, AmadeusErrorException, OpenWeatherCityNotFoundException, FoursquareNoCityException {
 		this.score = 0;
 		this.cityName = cityName;
 		this.countryCode = countryCode;
 		this.timestamp = timestamp;
-		this.terms = terms;
-		this.owappid = owappid;
-		this.fsappid = fsappid;
-		
-		
-		retrieveWeatherData();
-		//System.out.print( this.countryCode + ", ");
-		//System.out.print("please wait...");
-		//retrieveFeatureScore();
-		//retrieveCovidData();
-		//normalise();
-		//System.out.println("done!");
+		this.terms = terms;		
+		this.dataSource = 0;		
+		retrieveWeatherData();		
 	}
 
 
@@ -101,7 +87,6 @@ public class City {
 	/**
 	 * Retrieves Covid data for a country using the Amadeus API
 	 * @author it22046
-	 * @param String, a country code using ISO 3166 format (XX)
 	 * @throws IOException
 	 * @throws InterruptedException
 	 * @throws AmadeusErrorException
@@ -129,11 +114,7 @@ public class City {
 		String AmadeusAuthToken = amadeusAuthFields.getAccessToken();
 
 		//System.out.println(AmadeusAuthToken);
-
-		//for debugging
-		//String coyntryCode = countryInitials;
-		//String coyntryCode = "DD";
-
+		
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=" + this.countryCode))
 				.header("Authorization", "Bearer " + AmadeusAuthToken)
@@ -207,18 +188,18 @@ public class City {
 	 * @throws InterruptedException 
 	 * @throws OpenWeatherCityNotFoundException 
 	 */
-	private void retrieveWeatherData() throws IOException, InterruptedException, OpenWeatherCityNotFoundException {            
+	private void retrieveWeatherData() throws IOException, InterruptedException, OpenWeatherCityNotFoundException { 
+		String OPEN_WEATHER_APPID_22046 = "32fc4065e28603f29c061d7064f10147";
 		ObjectMapper mapper = new ObjectMapper();
-		String requestURL;
-		//OpenWeatherMap weather_obj = mapper.readValue(new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+owappid+""), OpenWeatherMap.class);
+		String requestURL;			
+		
 		if (this.countryCode == null) {
-			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+"&APPID="+this.owappid+"";
+			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+"&APPID="+ OPEN_WEATHER_APPID_22046 +"";
 		} else {
-			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+","+this.countryCode+"&APPID="+this.owappid+"";
+			requestURL = "http://api.openweathermap.org/data/2.5/weather?q="+this.cityName+","+this.countryCode+"&APPID="+OPEN_WEATHER_APPID_22046+"";
 		}
 
-		HttpRequest request = HttpRequest.newBuilder()
-				//.uri(URI.create("http://api.openweathermap.org/data/2.5/weather?q="+city+","+country+"&APPID="+owappid+""))
+		HttpRequest request = HttpRequest.newBuilder()				
 				.uri(URI.create(requestURL))
 				.header("Accept", "application/json")
 				.header("Authorization", "fsq3V4uGPDvrRFXcv6I2sgiuT85a2KdNFva9nW0yBmfO5c0=")
@@ -230,10 +211,11 @@ public class City {
 			throw new OpenWeatherCityNotFoundException(this.cityName);
 		}
 		OpenWeatherMap weather_obj = mapper.readValue(response.body(), OpenWeatherMap.class);
-		countryCode = weather_obj.getSys().getCountry();
-		this.vectorRepresentation[7] = weather_obj.getMain().getTemp();			
-		this.vectorRepresentation[8] = weather_obj.getClouds().getAll();			
-		this.vectorRepresentation[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K');			
+		countryCode = weather_obj.getSys().getCountry();		
+		
+		this.vectorRepresentation[7] = featureNormalizer(weather_obj.getMain().getTemp(), TEMPMAX, TEMPMIN);			
+		this.vectorRepresentation[8] = weather_obj.getClouds().getAll() / 100;			
+		this.vectorRepresentation[9] = calculateDistance(ATHENSLAT, ATHENSLON, weather_obj.getCoord().getLat(), weather_obj.getCoord().getLon(), 'K') / MAXDIST;	
 	}
 
 	/**
@@ -312,11 +294,13 @@ public class City {
 	 * @throws InterruptedException
 	 * @throws FoursquareNoCityException 
 	 */
-	public void retrieveFeatureScore() throws IOException, InterruptedException, FoursquareNoCityException {			
+	public void retrieveFeatureScore() throws IOException, InterruptedException, FoursquareNoCityException {
+		String FOURSQUARE_APPID_22046 = "fsq3V4uGPDvrRFXcv6I2sgiuT85a2KdNFva9nW0yBmfO5c0=";
 		for (int i = 0; i < this.terms.length; i++) {
-			this.vectorRepresentation[i] = calculateFeatureScoreByRating(this.cityName, this.countryCode, this.terms[i], this.fsappid);			
-		}		
+			this.vectorRepresentation[i] = calculateFeatureScoreByRating(this.cityName, this.countryCode, this.terms[i], FOURSQUARE_APPID_22046) / 10;	//ADDED /10		
+		}
 	}
+		
 
 	/**
 	 * Fetches rating values from the square API for each term and calculates the average.
@@ -338,12 +322,10 @@ public class City {
 		FourSquareController fsFields = getVenuesFromLocation(fsappid, query, location, countryCode, limit, sortingOptions[1]);
 
 		for (int i = 0; i < limit; i++) {
-			if (fsFields.getResults().isEmpty()) {
-				//System.out.print("5.0");
+			if (fsFields.getResults().isEmpty()) {				
 				sum += 5.0;
 			} else {
-				sum += getVenueRating(fsFields.getResults().get(i).getFsqId());
-				//System.out.print(sum + ", ");
+				sum += getVenueRating(fsFields.getResults().get(i).getFsqId());				
 			}				
 		}			
 		return sum / limit;
@@ -356,7 +338,6 @@ public class City {
 	 * @return Double array. The normalized vector.
 	 */
 	public void normalise() {		
-		
 		for (int i =0; i < 7; i++) {
 			this.vectorRepresentation[i] = this.vectorRepresentation[i] / 10;
 		}
@@ -424,28 +405,12 @@ public class City {
 		this.score = score;
 	}
 
-	public String getOwappid() {
-		return owappid;
-	}
-
-	public void setOwappid(String owappid) {
-		this.owappid = owappid;
-	}
-
-	public String getFsappid() {
-		return fsappid;
-	}
-
-	public void setFsappid(String fsappid) {
-		this.fsappid = fsappid;
-	}
-
 	public String[] getTerms() {
 		return terms;
 	}
 
 	public void setTerms(String[] terms) {
-		this.terms = terms;
+		this.terms = terms;		
 	}
 
 	public void setCountryCode(String countryCode) {
@@ -455,9 +420,12 @@ public class City {
 	public void setCovidData(AmadeusController covidData) {
 		this.covidData = covidData;
 	}
-	
-	
-	
-	
 
+	public int getDataSource() {
+		return dataSource;
+	}
+
+	public void setDataSource(int data) {
+		this.dataSource = data;
+	}
 }

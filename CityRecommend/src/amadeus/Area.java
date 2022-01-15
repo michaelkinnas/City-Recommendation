@@ -1,6 +1,7 @@
 
 package amadeus;
 
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -8,18 +9,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "name",
+    "areaType",
     "iataCode",
-    "areaType"
+    "geoCode"
 })
-
+@Generated("jsonschema2pojo")
 public class Area {
 
     @JsonProperty("name")
     private String name;
-    @JsonProperty("iataCode")
-    private String iataCode;
     @JsonProperty("areaType")
     private String areaType;
+    @JsonProperty("iataCode")
+    private String iataCode;
+    @JsonProperty("geoCode")
+    private GeoCode geoCode;
 
     @JsonProperty("name")
     public String getName() {
@@ -29,6 +33,16 @@ public class Area {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    @JsonProperty("areaType")
+    public String getAreaType() {
+        return areaType;
+    }
+
+    @JsonProperty("areaType")
+    public void setAreaType(String areaType) {
+        this.areaType = areaType;
     }
 
     @JsonProperty("iataCode")
@@ -41,14 +55,14 @@ public class Area {
         this.iataCode = iataCode;
     }
 
-    @JsonProperty("areaType")
-    public String getAreaType() {
-        return areaType;
+    @JsonProperty("geoCode")
+    public GeoCode getGeoCode() {
+        return geoCode;
     }
 
-    @JsonProperty("areaType")
-    public void setAreaType(String areaType) {
-        this.areaType = areaType;
+    @JsonProperty("geoCode")
+    public void setGeoCode(GeoCode geoCode) {
+        this.geoCode = geoCode;
     }
 
 }

@@ -12,10 +12,10 @@ public class TimestampCompare implements Comparator<City> {
 	 */
 	@Override
 	public int compare(City o1, City o2) {
-		if (o1.getTimestamp() > o2.getTimestamp()) {
-			return 1;
-		}else if (o1.getTimestamp() < o2.getTimestamp()) {
+		if (o1.getTimestamp() < o2.getTimestamp()) {
 			return -1;
+		}else if (o1.getTimestamp() < o2.getTimestamp()) {
+			return 1;
 		}else {
 			return 0;
 		}

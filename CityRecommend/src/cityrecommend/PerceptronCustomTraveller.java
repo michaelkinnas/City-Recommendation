@@ -6,16 +6,18 @@ import java.util.Collections;
 import comparators.GeodesicCompare;
 
 public class PerceptronCustomTraveller implements PerceptronTraveller{
-	private double[] weightBias = new double[10];
+	private double[] weightBias = new double[7];
 	private double bias = 0;    
 	private ArrayList<City> recCities = new ArrayList<>();
 	
 	public PerceptronCustomTraveller(double[] weights) {
+		/*
+		for (int i =0; i < weights.length; i++) {
+			weightBias[i] = weights[i];
+		}*/
 		this.weightBias = weights;
+		
 	}
-	
-	
-	
 
 	/**
 	 * Retrieves an Array.
@@ -85,8 +87,8 @@ public class PerceptronCustomTraveller implements PerceptronTraveller{
 	 */
 	private double sumVector(double[] vectorRepresantation){
 		double sum = 0;
-		double[] tempMatrix = new double[vectorRepresantation.length];
-		for (int i = 0; i < vectorRepresantation.length; i++ ) {
+		double[] tempMatrix = new double[vectorRepresantation.length-3];
+		for (int i = 0; i < vectorRepresantation.length-3; i++ ) {
 			tempMatrix[i] = vectorRepresantation[i];
 		}
 		for (int i = 0; i < tempMatrix.length; i++){

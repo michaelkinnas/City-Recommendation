@@ -12,6 +12,7 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
     private ArrayList<City> recCities = new ArrayList<>();
    
     
+   
     /**
 	 * Retrieves an Array.
 	 * @return  weightBias Array.

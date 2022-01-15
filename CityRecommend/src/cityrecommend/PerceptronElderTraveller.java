@@ -11,6 +11,7 @@ public class PerceptronElderTraveller implements PerceptronTraveller{
 	private double bias = 0;
 	private ArrayList<City> recCities = new ArrayList<>();
 	
+	
 
 	/**
 	 * Retrieves an Array.
