@@ -220,7 +220,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				JOptionPane.showMessageDialog(null, "You must add atleast one city to get recommendation.", "No city added", JOptionPane.WARNING_MESSAGE);
 				LOGGER.log(Level.WARNING, "Clicked Recommend button without adding cities.");	
 			} else if (chckbxCustomRecommendation.isSelected() && allKeywordsAreNotFilled()) {
-				JOptionPane.showMessageDialog(null, "You must fill all interests.", "Interest fields are empty", JOptionPane.WARNING_MESSAGE);			
+				JOptionPane.showMessageDialog(null, "You must fill all interest fields.", "Interest fields are empty", JOptionPane.WARNING_MESSAGE);			
 			} else {			
 				for (City city: cities) {					
 					if (chckbxCustomRecommendation.isSelected() && !(city.getDataSource() == 2)) {
@@ -401,7 +401,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			protected Void doInBackground() throws Exception {
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
-				//city.retrieveCovidData();
+				city.retrieveCovidData();
 				city.setDataSource(dataSource);				
 				return null;
 			}
