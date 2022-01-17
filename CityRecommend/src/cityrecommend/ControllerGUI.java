@@ -3,38 +3,39 @@ package cityrecommend;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JCheckBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.awt.Toolkit;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -57,6 +58,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ListSelectionModel;
 
 
 public class ControllerGUI extends JFrame implements MouseInputListener, ActionListener, WindowListener {
@@ -64,14 +66,23 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * 
 	 */
 	private static final long serialVersionUID = -8395609496282147027L;	
-	private static final String[] TERMS = new String[] {"bar","beach","restaurant","museum","hotel","transport","temple"};
+	private static final String[] DEFAULT_TERMS = new String[] {"bar","beach","restaurant","museum","hotel","transport","temple"};
 	private static final String FILEPATH = "backup.json";
 
-	private ArrayList<City> cities = new ArrayList<City>();
+	private ArrayList<City> cities = new ArrayList<>();
+
+	private PerceptronTraveller pty = new PerceptronYoungTraveller();
+	private PerceptronTraveller ptm = new PerceptronMiddleTraveller();
+	private PerceptronTraveller pte = new PerceptronElderTraveller();
+	private PerceptronTraveller ptc;
+
+	private ArrayList<City> recommendedYoung = new ArrayList<>();
+	private ArrayList<City> recommendedMiddle  = new ArrayList<>();
+	private ArrayList<City> recommendedElder = new ArrayList<>();
+	private ArrayList<City> recommendedCustom = new ArrayList<>();
 
 	private JPanel contentPane;
 	private JCheckBox chckbxCustomRecommendation;
-	private JPanel panelCustomSettings;	
 	private JSeparator separator_1;
 
 	private JTextField textField1;
@@ -95,30 +106,13 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	private JButton btnRecommend;
 	private JLabel lblStatus;
 
-	private DefaultListModel<String> modelSelectedCities = new DefaultListModel<>();
-	private JList<String> listSelectedCities;
-
-	private DefaultListModel<String> modelRecommendedCities = new DefaultListModel<>();
-	private JList<String> listRecommended;	
-
 	private JButton btnCovidInfo;
 	private JTextField textFieldCityName;
-	private JTextField textFieldCountryCode;
 	private JLabel lblNewLabel_3;
-	private JLabel lblNewLabel_4;
 	private JButton btnAdd;
 	private JButton btnRemove;
 	private JButton btnClear;
 	private JButton btnDateTable;
-	private PerceptronTraveller pty;
-	private PerceptronTraveller ptm;
-	private PerceptronTraveller pte;
-	private PerceptronTraveller ptc;
-
-	private ArrayList<City> recommendedYoung = new ArrayList<>();
-	private ArrayList<City> recommendedMiddle  = new ArrayList<>();
-	private ArrayList<City> recommendedElder = new ArrayList<>();
-	private ArrayList<City> recommendedCustom = new ArrayList<>();
 
 	private int createCitySemaphore = 0; //for creating cities threads
 	private int retrieveDataSemaphore = 0; //for retrieving rest of city data from APIs	
@@ -130,9 +124,21 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	private File saveFile;
 	private JComboBox<String> comboBoxSorting;
 
-	private DateAdded dateFrame;
+	private DateAdded dateFrame;  
+	private JComboBox<String> countryComboBox;
 
 	private static final Logger LOGGER = Logger.getLogger(ControllerGUI.class.getName());
+	private JTable previewItems;
+	private JTable recommendedItems;
+	private JScrollPane scrollPane_1;
+	private JScrollPane scrollPane;
+	private JSeparator separator_1_1;
+	private JSeparator separator;
+	private TreeMap<String, String> hashMapSorted;	
+	//private String[] sortedCountriesList;	
+	private HashMap<String, String> countryCodesAndNamesLookUp;
+
+
 	/**
 	 * Create the frame.
 	 * @throws UnsupportedLookAndFeelException 
@@ -141,8 +147,11 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * @throws ClassNotFoundException 
 	 */
 	public ControllerGUI() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {	
-		Handler consoleHandler = null;
 		Handler fileHandler  = null;
+		Handler consoleHandler  = null;
+		createCountriesCodeHashMapLookUpTable();		
+
+		hashMapSorted = makeHashMapSorted(hashMapSorted);
 
 		try {
 			//Creating consoleHandler and fileHandler
@@ -154,7 +163,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			LOGGER.addHandler(fileHandler);
 
 			//Setting levels to handlers and LOGGER
-			consoleHandler.setLevel(Level.ALL);
+			consoleHandler.setLevel(Level.OFF);
 			fileHandler.setLevel(Level.ALL);
 			LOGGER.setLevel(Level.ALL);
 
@@ -167,9 +176,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			LOGGER.log(Level.SEVERE, "Error occur in FileHandler.", exception);
 		}
 
-
-
-		drawGui();
+		drawGUI2();
 		cvframe = new CovidFrame();
 		LOGGER.log(Level.FINE, "Drew interface");
 
@@ -188,15 +195,17 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 	}
 
-
 	/**
 	 * Displays items from cities ArrayList in the preview JList
 	 */
 	private void displayPreviewItems() {
-		modelSelectedCities.removeAllElements();
-		for (City city: cities) {
-			modelSelectedCities.addElement(city.getCityName() + " " +  city.getCountryCode());
-		}		
+		Object[][] data = new Object[cities.size()][2];	
+		for (int i = 0; i < cities.size(); i++) {
+			data[i][0] = cities.get(i).getCityName();
+			data[i][1] = countryCodesAndNamesLookUp.get(cities.get(i).getCountryCode());
+		}
+		DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
+		previewItems.setModel(table);
 	}
 
 	/**
@@ -209,17 +218,19 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			LOGGER.log(Level.FINE, "Clicked Recommend button.");
 			if (cities.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "You must add atleast one city to get recommendation.", "No city added", JOptionPane.WARNING_MESSAGE);
-				LOGGER.log(Level.WARNING, "Clicked Recommend button without adding cities.");
-			} else {
-				for (City city: cities) {
+				LOGGER.log(Level.WARNING, "Clicked Recommend button without adding cities.");	
+			} else if (chckbxCustomRecommendation.isSelected() && allKeywordsAreNotFilled()) {
+				JOptionPane.showMessageDialog(null, "You must fill all interests.", "Interest fields are empty", JOptionPane.WARNING_MESSAGE);			
+			} else {			
+				for (City city: cities) {					
 					if (chckbxCustomRecommendation.isSelected() && !(city.getDataSource() == 2)) {
-						LOGGER.log(Level.FINE, "Retrieving data for cities.");
-						retrieveDataSemaphoreUp();
+						LOGGER.log(Level.FINE, "Retrieving data for cities.");						
+						retrieveDataSemaphoreUp();						
 						retrieveCityData(city, this.customTerms, 2);					
 					} else if (!chckbxCustomRecommendation.isSelected() && !(city.getDataSource() == 1)) {
-						LOGGER.log(Level.FINE, "Retrieving data for cities with custom data.");
-						retrieveDataSemaphoreUp();
-						retrieveCityData(city, TERMS, 1);
+						LOGGER.log(Level.FINE, "Retrieving data for cities with custom data.");						
+						retrieveDataSemaphoreUp();						
+						retrieveCityData(city, DEFAULT_TERMS, 1);
 					}
 				}
 
@@ -235,7 +246,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		if (e.getSource() == btnRemove) {
 			LOGGER.log(Level.FINE, "Clicked Remove button.");
-			int index = listSelectedCities.getSelectedIndex();
+			int index = previewItems.getSelectedRow();
 			if (index == -1) {
 				LOGGER.log(Level.WARNING, "Clicked Remove button without selecting a city first.");
 				JOptionPane.showMessageDialog(null, "You must select a city first.", "No city selected", JOptionPane.WARNING_MESSAGE);
@@ -250,17 +261,16 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		if (e.getSource() == btnAdd) {
 			LOGGER.log(Level.FINE, "Clicked Add button.");
-			createCitySemaphoreUp();
-			addCity(textFieldCityName.getText(), textFieldCountryCode.getText());
+			createCitySemaphoreUp();			
+
+			addCity(textFieldCityName.getText(), hashMapSorted.get(countryComboBox.getSelectedItem().toString()));
 			textFieldCityName.setText("");
-			textFieldCountryCode.setText("");
+			countryComboBox.setSelectedIndex(0);
 			textFieldCityName.requestFocus();
 		} 
 
 		if (e.getSource() == btnClear) {
 			LOGGER.log(Level.FINE, "Clicked Clear button.");
-			modelSelectedCities.removeAllElements();
-			modelRecommendedCities.removeAllElements();
 
 			recommendedYoung = new ArrayList<>();
 			recommendedMiddle = new ArrayList<>();
@@ -268,24 +278,16 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			recommendedCustom = new ArrayList<>();
 			cities = new ArrayList<>();
 
-			textField1.setText("");
-			textField2.setText("");
-			textField3.setText("");
-			textField4.setText("");
-			textField5.setText("");
-			textField6.setText("");
-			textField7.setText("");
-
-			comboBox1.setSelectedIndex(0);
-			comboBox2.setSelectedIndex(0);
-			comboBox3.setSelectedIndex(0);
-			comboBox4.setSelectedIndex(0);
-			comboBox5.setSelectedIndex(0);
-			comboBox6.setSelectedIndex(0);
-			comboBox7.setSelectedIndex(0);
-
+			emptyCustomizedTextfields();
+						
+			setDefaultFeaturesInTextfields();
+			setDefaultComboBoxImportance();
+		
 			textFieldCityName.setText("");
-			textFieldCountryCode.setText("");
+			countryComboBox.setSelectedIndex(0);
+
+			displayResults();
+			displayPreviewItems();
 		}
 
 		if (e.getSource() == btnDateTable) {
@@ -308,7 +310,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		if (e.getSource() == btnCovidInfo) {
 			LOGGER.log(Level.FINE, "Clicked COVID info button.");
-			int index = listRecommended.getSelectedIndex();
+			int index = recommendedItems.getSelectedRow();
 
 			if (index == -1) {
 				JOptionPane.showMessageDialog(null, "You must select a city first.", "No city selected", JOptionPane.WARNING_MESSAGE);
@@ -316,13 +318,74 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			} else {
 				cvframe.setTextAreaText("");
 				City city = cities.get(index);				
-				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + city.getCountryCode() );
-
-				setCovidData(city);							
-
+				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + city.getCountryCode());
+				setCovidData(city);
 				cvframe.setVisible(true);
 			}			
 		}
+
+
+		if (e.getSource() == chckbxCustomRecommendation) {
+			if (chckbxCustomRecommendation.isSelected()) {
+				LOGGER.log(Level.FINE, "Checked custom recommendations checkbox.");		
+				customFeaturesEnable();
+				restoreUserSelectedFeaturesInTextfields();
+				restoreUserSelectedImportanceSettings();				
+			} else {
+				LOGGER.log(Level.FINE, "Unchecked custom recommendations checkbox.");				
+				getCustomData();				
+				customFeaturesDisable();
+				setDefaultFeaturesInTextfields();
+				setDefaultComboBoxImportance();
+			}
+		}
+	}
+
+
+
+	private boolean allKeywordsAreNotFilled() {
+		if (textField1.getText().equals("") || textField2.getText().equals("") || textField3.getText().equals("") ||
+			textField4.getText().equals("") || textField5.getText().equals("") || textField6.getText().equals("") || 
+			textField7.getText().equals("")) {
+			return true;
+		}
+		return false;
+	}
+
+	private void restoreUserSelectedImportanceSettings() {
+		comboBox1.setSelectedIndex(weightsToImportanceLevel(0));
+		comboBox2.setSelectedIndex(weightsToImportanceLevel(1));
+		comboBox3.setSelectedIndex(weightsToImportanceLevel(2));
+		comboBox4.setSelectedIndex(weightsToImportanceLevel(3));
+		comboBox5.setSelectedIndex(weightsToImportanceLevel(4));
+		comboBox6.setSelectedIndex(weightsToImportanceLevel(5));
+		comboBox7.setSelectedIndex(weightsToImportanceLevel(6));
+
+	}
+
+	private int weightsToImportanceLevel(int index) {		
+		if (customTermsBias[index] == 1) {
+			return 0; 
+		} else if (customTermsBias[index] == 0.5){
+			return 1;
+		} else if (customTermsBias[index] == 0) {
+			return  2;
+		} else if (customTermsBias[index] == -0.5) {
+			return  3;
+		} else {
+			return  4;
+		}	
+
+	}
+
+	private void restoreUserSelectedFeaturesInTextfields() {	
+		textField1.setText(customTerms[0]);
+		textField2.setText(customTerms[1]);
+		textField3.setText(customTerms[2]);
+		textField4.setText(customTerms[3]);
+		textField5.setText(customTerms[4]);
+		textField6.setText(customTerms[5]);
+		textField7.setText(customTerms[6]);
 	}
 
 	/**
@@ -338,27 +401,28 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			protected Void doInBackground() throws Exception {
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
-				city.retrieveCovidData();
+				//city.retrieveCovidData();
 				city.setDataSource(dataSource);				
 				return null;
 			}
 			protected void done() {				
 				retrieveDataSemaphoreDown();
-			}			
+			}
 		};
 		worker.execute();
 	}
-	
+
 	/**
 	 * A semaphore UP for the retrieveCityData thread. It increases the retrieveDataSemaphore variable by 1
 	 * and also disables the recommend button and sets status label accordingly.
 	 */
 	private synchronized void retrieveDataSemaphoreUp() {
 		this.retrieveDataSemaphore++;
+		System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		this.btnRecommend.setEnabled(false);	
 		this.lblStatus.setText("Please wait, working...");
 	}
-	
+
 	/**
 	 * A semaphore DOWN for the retrieveCityData. It checks if retrieveDataSemaphore variable is 0 
 	 * and if is, it calls the appropriate post data retrieve methods. It also re-enables the recommend
@@ -366,7 +430,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreDown() {
 		this.retrieveDataSemaphore--; //if retrieve data threads have finished run the recommendation perceptrons		
-
+		System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		if (retrieveDataSemaphore == 0) {
 			makeRecommendations();
 			sortRecommendations(new ScoreCompare().reversed());
@@ -386,33 +450,60 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		Collections.sort(recommendedElder, sorter);	
 		Collections.sort(recommendedCustom, sorter);	
 	}
-	
+
+
 	/**
-	 * Adds the appropriate recommended ArrayList results to the model of the recommended JList in the GUI
+	 * Adds the appropriate recommended ArrayList results to the model of the recommended JTable in the GUI
 	 * according to the perceptron selected. 
-	 */
-	private void displayResults() {	
-		modelRecommendedCities.removeAllElements();
+	 */	
+	private void displayResults() {
 		if (chckbxCustomRecommendation.isSelected()) {		
-			for (int i = 0; i < recommendedCustom.size(); i++) {				
-				modelRecommendedCities.addElement(recommendedCustom.get(i).getCityName() + " " +  recommendedCustom.get(i).getCountryCode());
+			Object[][] data = new Object[recommendedCustom.size()][2];	
+			for (int i = 0; i < recommendedCustom.size(); i++) {
+				data[i][0] = recommendedCustom.get(i).getCityName();
+				data[i][1] = countryCodesAndNamesLookUp.get(recommendedCustom.get(i).getCountryCode());
 			}
+			DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
+			recommendedItems.setModel(table);
 		} else {
 			if (comboBoxAgeRange.getSelectedIndex() == 0) {				
+				Object[][] data = new Object[recommendedYoung.size()][2];	
 				for (int i = 0; i < recommendedYoung.size(); i++) {
-					modelRecommendedCities.addElement(recommendedYoung.get(i).getCityName() + " " +  recommendedYoung.get(i).getCountryCode());
+					data[i][0] = recommendedYoung.get(i).getCityName();
+					data[i][1] = countryCodesAndNamesLookUp.get(recommendedYoung.get(i).getCountryCode()); 					
 				}
+				DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
+				recommendedItems.setModel(table);
 			} else if (comboBoxAgeRange.getSelectedIndex() == 1) {				
-				for (int i = 0; i < recommendedMiddle.size(); i++) {				
-					modelRecommendedCities.addElement(recommendedMiddle.get(i).getCityName() + " " +  recommendedMiddle.get(i).getCountryCode());
+				Object[][] data = new Object[recommendedMiddle.size()][2];	
+				for (int i = 0; i < recommendedMiddle.size(); i++) {
+					data[i][0] = recommendedMiddle.get(i).getCityName();
+					data[i][1] = countryCodesAndNamesLookUp.get(recommendedMiddle.get(i).getCountryCode());
 				}
+				DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
+				recommendedItems.setModel(table);
 			} else {			
-				for (int i = 0; i < recommendedElder.size(); i++) {				
-					modelRecommendedCities.addElement(recommendedElder.get(i).getCityName() + " " +  recommendedElder.get(i).getCountryCode());
+				Object[][] data = new Object[recommendedElder.size()][2];	
+				for (int i = 0; i < recommendedElder.size(); i++) {
+					data[i][0] = recommendedElder.get(i).getCityName();
+					data[i][1] = countryCodesAndNamesLookUp.get(recommendedElder.get(i).getCountryCode());
 				}
+				DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
+				recommendedItems.setModel(table);
 			}
-		}		
+		}
+
+		for(City city: cities) {
+			System.out.println(city.getCityName() + " data source: " + city.getDataSource());
+			for (int i =0; i < city.getVectorRepresentation().length; i++) {
+				System.out.printf("%.2f, ", city.getVectorRepresentation()[i]);
+
+			}
+			System.out.println();
+		}
+
 	}
+
 
 	/**
 	 * Creates PerceptronTraveller objects and calls their recommend methods
@@ -435,54 +526,16 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
-	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-	
 	/**
 	 * ActionListener interface method implementation.
 	 * @param ActionEvent
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (chckbxCustomRecommendation.isSelected()) {
-			LOGGER.log(Level.FINE, "Checked custom recommendations checkbox.");
-			panelCustomSettings.setVisible(true);
-		} else {
-			LOGGER.log(Level.FINE, "Unchecked custom recommendations checkbox.");
-			panelCustomSettings.setVisible(false);
+	public void actionPerformed(ActionEvent e) {		
+		if (e.getSource() == comboBoxAgeRange && !chckbxCustomRecommendation.isSelected()) {
+			setDefaultComboBoxImportance();
 		}
 
 		if (e.getSource() == comboBoxSorting) {
@@ -502,20 +555,65 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			displayResults();			
 		}		
 	}
-	
+
+	private void emptyCustomizedTextfields() {		
+		textField1.setText("");
+		textField2.setText("");
+		textField3.setText("");
+		textField4.setText("");
+		textField5.setText("");
+		textField6.setText("");
+		textField7.setText("");		
+	}
+
+
+	public void customFeaturesDisable() {		
+		textField1.setEnabled(false);
+		textField2.setEnabled(false);
+		textField3.setEnabled(false);
+		textField4.setEnabled(false);
+		textField5.setEnabled(false);
+		textField6.setEnabled(false);
+		textField7.setEnabled(false);
+		comboBox1.setEnabled(false);
+		comboBox2.setEnabled(false);
+		comboBox3.setEnabled(false);
+		comboBox4.setEnabled(false);
+		comboBox5.setEnabled(false);
+		comboBox6.setEnabled(false);
+		comboBox7.setEnabled(false);
+	}
+
+	public void customFeaturesEnable() {
+		textField1.setEnabled(true);
+		textField2.setEnabled(true);
+		textField3.setEnabled(true);
+		textField4.setEnabled(true);
+		textField5.setEnabled(true);
+		textField6.setEnabled(true);
+		textField7.setEnabled(true);
+		comboBox1.setEnabled(true);
+		comboBox2.setEnabled(true);
+		comboBox3.setEnabled(true);
+		comboBox4.setEnabled(true);
+		comboBox5.setEnabled(true);
+		comboBox6.setEnabled(true);
+		comboBox7.setEnabled(true);
+	}
+
 	/**
 	 * Reads the custom data given by a user from the GUI.
 	 */
-	private void getCustomData() {
+	private void getCustomData() {	
 		int[] selections = new int[7];
 
-		this.customTerms[0] = textField1.getSelectedText();
-		this.customTerms[1] = textField2.getSelectedText();
-		this.customTerms[2] = textField3.getSelectedText();
-		this.customTerms[3] = textField4.getSelectedText();
-		this.customTerms[4] = textField5.getSelectedText();
-		this.customTerms[5] = textField6.getSelectedText();
-		this.customTerms[6] = textField7.getSelectedText();
+		customTerms[0] = textField1.getText();		
+		customTerms[1] = textField2.getText();
+		customTerms[2] = textField3.getText();
+		customTerms[3] = textField4.getText();
+		customTerms[4] = textField5.getText();
+		customTerms[5] = textField6.getText();
+		customTerms[6] = textField7.getText();
 
 		selections[0] = comboBox1.getSelectedIndex();
 		selections[1] = comboBox2.getSelectedIndex();
@@ -540,7 +638,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 	}
 
-	
+
 	/**
 	 * Creates a new city object and calls the open weather API, using threads
 	 * with SwingWorker.
@@ -557,7 +655,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				City temp;
 
 				try {					
-					temp = new City(cityName, countryCode, TERMS, date.getTime());
+					temp = new City(cityName, countryCode, DEFAULT_TERMS, date.getTime());
 					if (!cities.contains(temp)) {
 						cities.add(temp);
 					} else {						
@@ -580,7 +678,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 
 	}
-	
+
 	/**
 	 * A semaphore UP for the createCity process.
 	 * It also disables the recommend button and sets 
@@ -591,7 +689,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		this.btnRecommend.setEnabled(false);
 		this.lblStatus.setText("Please wait, working...");
 	}
-	
+
 	/**
 	 * A semaphore DOWN for the createCity process.
 	 * It also re-enables the recommend button and sets
@@ -638,6 +736,54 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 	}
 
+	private String[] getAllCountries() {//consider argument String[] array
+		//Create String array to save countries' names from list of countries created with Locale
+		String[] countries = new String[Locale.getISOCountries().length+1];
+		//Create list of all countries (initials-code and name) defined in ISO 3166 with Locale
+		String[] localeCountries = Locale.getISOCountries();
+		
+		countries[0] = "-";
+		for (int i = 1; i <= localeCountries.length; i++) {
+			Locale obj = new Locale("", localeCountries[i-1]);
+			countries[i] = (obj.getDisplayCountry(Locale.ENGLISH) + ", " + obj.getCountry());
+		}
+		Arrays.sort(countries);		
+		return countries;
+	}
+
+	
+	private void createCountriesCodeHashMapLookUpTable() {		
+		String[] CountryISOList = Locale.getISOCountries();
+		countryCodesAndNamesLookUp = new HashMap<>();
+		ArrayList<String> temp = new ArrayList<>();
+		
+		temp.add("-");
+		for (int i =0; i < CountryISOList.length; i++) {
+			Locale locale = new Locale("", CountryISOList[i]);			
+			countryCodesAndNamesLookUp.put(locale.getCountry(), locale.getDisplayCountry(Locale.ENGLISH));
+			temp.add(locale.getDisplayCountry(Locale.ENGLISH) + ", " + locale.getCountry());
+		}		
+		Collections.sort(temp);		
+		//sortedCountriesList = temp.toArray(sortedCountriesList);		
+		/*
+		for (Entry<String, String> entry: countryCodesAndNamesLookUp.entrySet()) {
+			System.out.println(entry.getKey() + " " + entry.getValue());			
+		}*/			
+	}	
+	
+
+	private TreeMap<String, String> makeHashMapSorted(TreeMap<String, String> inputHashMap) {
+		//create HashMap of countries and codes with Locale
+		HashMap<String, String> countriesNameCode = new HashMap<>();
+		for (String iso : Locale.getISOCountries()) {
+			Locale l = new Locale("", iso);
+			countriesNameCode.put((l.getDisplayCountry(Locale.ENGLISH) + ", " + l.getCountry()), iso);
+		}
+		//sort HashMap with TreeMap
+		TreeMap<String, String> hashMapSorted = new TreeMap<>(countriesNameCode);
+		return (inputHashMap = hashMapSorted);//????
+	}
+
 
 	/**
 	 * Serialization into JSON file (write method). This method converts ArrayList of cities objects into strings
@@ -676,35 +822,63 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		return cities;    
 	}
 
-	@SuppressWarnings("unused")
-	private void DEBUG_printCityScores() {
-		//DEBUGING Print socres of recommendations
-
-		System.out.println("Custom");
-		for (int i=0; i < this.recommendedCustom.size(); i++) {
-			System.out.println(recommendedCustom.get(i).getCityName() + " " + recommendedCustom.get(i).getScore());
-		}
-		System.out.println("Young");
-		for (int i=0; i < this.recommendedYoung.size(); i++) {
-			System.out.println(recommendedYoung.get(i).getCityName() + " " + recommendedYoung.get(i).getScore());
-		}
-		System.out.println("Middle");
-		for (int i=0; i < this.recommendedMiddle.size(); i++) {
-			System.out.println(recommendedMiddle.get(i).getCityName() + " " + recommendedMiddle.get(i).getScore());
-		}
-		System.out.println("Elder");
-		for (int i=0; i < this.recommendedElder.size(); i++) {
-			System.out.println(recommendedElder.get(i).getCityName() + " " + recommendedElder.get(i).getScore());
-		}
-		System.out.println();
+	public void setDefaultFeaturesInTextfields() {        
+		textField1.setText(DEFAULT_TERMS[0]);
+		textField2.setText(DEFAULT_TERMS[1]);
+		textField3.setText(DEFAULT_TERMS[2]);
+		textField4.setText(DEFAULT_TERMS[3]);
+		textField5.setText(DEFAULT_TERMS[4]);
+		textField6.setText(DEFAULT_TERMS[5]);
+		textField7.setText(DEFAULT_TERMS[6]);
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-
+	private void setDefaultComboBoxImportance() {
+		comboBox1.setSelectedIndex(setCategoryAccordingToWeights(0));
+		comboBox2.setSelectedIndex(setCategoryAccordingToWeights(1));
+		comboBox3.setSelectedIndex(setCategoryAccordingToWeights(2));
+		comboBox4.setSelectedIndex(setCategoryAccordingToWeights(3));
+		comboBox5.setSelectedIndex(setCategoryAccordingToWeights(4));
+		comboBox6.setSelectedIndex(setCategoryAccordingToWeights(5));
+		comboBox7.setSelectedIndex(setCategoryAccordingToWeights(6));
 	}
+
 	
+	/**
+	 * Convert weight range to one of 5 importance option in the combo boxes
+	 * @param index
+	 * @return
+	 */
+	private int setCategoryAccordingToWeights(int index) {
+		double[] weights;
+		if (comboBoxAgeRange.getSelectedIndex() == 0) {
+			weights = pty.getWeightBias();
+		} else if (comboBoxAgeRange.getSelectedIndex() == 2) {
+			weights = ptm.getWeightBias();
+		} else {
+			weights = pte.getWeightBias();
+		}
+
+		int category = 2;
+
+		if (weights[index] > -1.0) {
+			category = 4;
+		} 
+		if (weights[index] > -1.0) {
+			category = 3;
+		}
+		if (weights[index] > -0.5) {
+			category = 2;
+		}
+		if (weights[index] > 0) {
+			category = 1;
+		}
+		if (weights[index] > 0.5) {
+			category = 0;
+		}
+		return category;
+
+	}
+
 	/**
 	 * A WindowListener interface method implementation.
 	 * @param A WindowEvent.
@@ -723,36 +897,8 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		System.exit(0);		
 	}
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
 
-	}
 
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-	
 	/**
 	 * I builds the COVID info string from the COVID object Jackson object.
 	 * @param A City object.
@@ -806,24 +952,29 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		//infoarray.add("Banned areas: " + city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea()+"\n");
 		infoArrayList.add("Banned areas: ");
-		for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().size(); i++) {			
-			infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getName());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getIataCode());
-			//infoarray.add(" ";
-			//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getAreaType();
-			infoArrayList.add(", ");
+		if (city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea() != null) {
+			for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().size(); i++) {			
+				infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getName());
+				infoArrayList.add(" ");
+				infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getIataCode());
+				//infoarray.add(" ";
+				//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getAreaType();
+				infoArrayList.add(", ");
+			}
 		}
 		infoArrayList.add("\n");
 		infoArrayList.add("Border ban: ");
 		//infoarray.add("Border ban: " + city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan()+"\n");
-		for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().size(); i++) {			
-			infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().get(i).getBorderType());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().get(i).getStatus());
-			//infoarray.add(" ";
-			//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getAreaType();
-			infoArrayList.add(", ");
+
+		if (city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan() != null) {
+			for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().size(); i++) {			
+				infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().get(i).getBorderType());
+				infoArrayList.add(" ");
+				infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBorderBan().get(i).getStatus());
+				//infoarray.add(" ";
+				//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getEntry().getBannedArea().get(i).getAreaType();
+				infoArrayList.add(", ");
+			}
 		}
 		infoArrayList.add("\n\n");
 
@@ -850,15 +1001,18 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		infoArrayList.add("Misc info: " + city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getText()+"\n");
 		infoArrayList.add("Duration: " + city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getDuration()+"\n");
 		//infoarray.add("Quarantine on arrival areas: " + city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas()+"\n\n";
-		infoArrayList.add("Quarantine on arrival areas: ");		
-		for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().size(); i++) {			
-			infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getIataCode());
-			//infoarray.add(" ";
-			//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getAreaType();
-			//infoarray.add(" ";
-			//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getAdditionalProperties();
-			infoArrayList.add(", ");
+		infoArrayList.add("Quarantine on arrival areas: ");	
+		if (city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas() != null) {
+			for (int i = 0; i < city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().size(); i++) {			
+				infoArrayList.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getIataCode());
+				//infoarray.add(" ";
+				//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getAreaType();
+				//infoarray.add(" ";
+				//infoarray.add(city.getCovidData().getData().getAreaAccessRestriction().getQuarantineModality().getQuarantineOnArrivalAreas().get(i).getAdditionalProperties();
+				infoArrayList.add(", ");
+			}
 		}
+
 		infoArrayList.add("\n\n");
 
 		infoArrayList.add("AREA ACCESS RESTRICTION -- APPS\n");
@@ -887,34 +1041,39 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		//infoarray.add("Area restrictions: " + city.getCovidData().getData().getAreaRestrictions()+"\n\n";
 		infoArrayList.add("AREA RESTRICTIONS:\n");
-		for (int i = 0; i <city.getCovidData().getData().getAreaRestrictions().size(); i++) {			
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getDate());
-			infoArrayList.add("\n");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getRestrictionType());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getText());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getTitle());
-			infoArrayList.add(" ");
-			infoArrayList.add("\n");
+		if (city.getCovidData().getData().getAreaRestrictions() != null) {
+			for (int i = 0; i <city.getCovidData().getData().getAreaRestrictions().size(); i++) {			
+				infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getDate());
+				infoArrayList.add("\n");
+				infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getRestrictionType());
+				infoArrayList.add(" ");
+				infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getText());
+				infoArrayList.add(" ");
+				infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getTitle());
+				infoArrayList.add(" ");
+				infoArrayList.add("\n");
+			}
 		}
+
 		infoArrayList.add("\n");
-		
+
 		//infoarray.add("Area vaccinated: " + city.getCovidData().getData().getAreaVaccinated() +"\n\n";
 		infoArrayList.add("AREA VACCINATED:\n");
-		for (int i = 0; i <city.getCovidData().getData().getAreaVaccinated().size(); i++) {			
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getDate());
-			infoArrayList.add("\n");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getRestrictionType());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getText());
-			infoArrayList.add(" ");
-			infoArrayList.add(city.getCovidData().getData().getAreaRestrictions().get(i).getTitle());
-			infoArrayList.add(" ");
-			infoArrayList.add("\n");
-		}
+		/*
+		if (city.getCovidData().getData().getAreaVaccinated() != null) {
+			for (int i = 0; i <city.getCovidData().getData().getAreaVaccinated().size(); i++) {			
+				infoArrayList.add(city.getCovidData().getData().getAreaVaccinated().get(i).getDate());
+				infoArrayList.add("\n");
+
+				infoArrayList.add(city.getCovidData().getData().getAreaVaccinated().get(i).getText());
+				infoArrayList.add(" ");
+
+				infoArrayList.add("\n");
+			}
+		}*/
+
 		infoArrayList.add("\n");
-		
+
 		infoArrayList.add("Data sources covid dashboard link: " + city.getCovidData().getData().getDataSources().getCovidDashboardLink() +"\n");
 		infoArrayList.add("Goverment site link: " + city.getCovidData().getData().getDataSources().getGovernmentSiteLink() +"\n");
 		infoArrayList.add("Health department site link: " + city.getCovidData().getData().getDataSources().getHealthDepartementSiteLink() +"\n\n");			
@@ -936,262 +1095,331 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		cvframe.appendTextAreaText(filteredStr);		
 	}
-	
+
 	/**
-	 * Parameters for the GUI creation process.
+	 * Draw interface components.
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws UnsupportedLookAndFeelException
 	 */
-	private void drawGui() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	private void drawGUI2() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		setResizable(false);
 		setTitle("City Recommend");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/MainIcon.png")));
 		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		addWindowListener(this);		
+		addWindowListener(this);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 775, 523);
+		setBounds(100, 100, 848, 513);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		listSelectedCities = new JList<>( modelSelectedCities );
-		listSelectedCities.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		listSelectedCities.setToolTipText("List of seected places to get recommendations from. Select an item and click the remove button to remove it from the list.");
-		listSelectedCities.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		listSelectedCities.setBounds(10, 127, 218, 249);
-		contentPane.add(listSelectedCities);
-
-		JLabel lblNewLabel = new JLabel("Selected places");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel.setBounds(10, 12, 93, 15);
-		contentPane.add(lblNewLabel);
-
-		btnRecommend = new JButton("Recommend");
-		btnRecommend.setToolTipText("Get recommendations!");
-		btnRecommend.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnRecommend.setBounds(315, 180, 125, 23);
-		btnRecommend.addMouseListener(this);		
-		contentPane.add(btnRecommend);
-
-		chckbxCustomRecommendation = new JCheckBox("Customize criteria");
-		chckbxCustomRecommendation.setToolTipText("Enable customized criteria for you!");
-		chckbxCustomRecommendation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		chckbxCustomRecommendation.setBounds(315, 210, 121, 23);
-		chckbxCustomRecommendation.addActionListener(this);
-		contentPane.add(chckbxCustomRecommendation);
-
-		panelCustomSettings = new JPanel();
-		panelCustomSettings.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelCustomSettings.setBounds(10, 387, 739, 69);
-		contentPane.add(panelCustomSettings);
-		panelCustomSettings.setLayout(null);
-
-		JLabel lblNewLabel_1 = new JLabel("Interests:");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(8, 12, 53, 15);
-		panelCustomSettings.add(lblNewLabel_1);
-
-		textField1 = new JTextField();
-		textField1.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField1.setBounds(71, 9, 85, 20);
-		panelCustomSettings.add(textField1);
-		textField1.setColumns(10);
-
-		JLabel lblNewLabel_1_1 = new JLabel("Opinion:");
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_1_1.setBounds(8, 43, 45, 15);
-		panelCustomSettings.add(lblNewLabel_1_1);		
-
-		comboBox1 = new JComboBox<String>();
-		comboBox1.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox1.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		comboBox1.setBounds(71, 40, 85, 21);
-		panelCustomSettings.add(comboBox1);
-
-		textField2 = new JTextField();
-		textField2.setBounds(167, 9, 85, 20);
-		panelCustomSettings.add(textField2);
-		textField2.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField2.setColumns(10);
-
-		textField3 = new JTextField();
-		textField3.setBounds(263, 9, 85, 20);
-		panelCustomSettings.add(textField3);
-		textField3.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField3.setColumns(10);
-
-		textField4 = new JTextField();
-		textField4.setBounds(359, 9, 85, 20);
-		panelCustomSettings.add(textField4);
-		textField4.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField4.setColumns(10);
-
-		textField5 = new JTextField();
-		textField5.setBounds(455, 9, 85, 20);
-		panelCustomSettings.add(textField5);
-		textField5.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField5.setColumns(10);
-
-		textField6 = new JTextField();
-		textField6.setBounds(551, 9, 85, 20);
-		panelCustomSettings.add(textField6);
-		textField6.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField6.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField6.setColumns(10);
-
-		textField7 = new JTextField();
-		textField7.setBounds(647, 9, 85, 20);
-		panelCustomSettings.add(textField7);
-		textField7.setToolTipText("Type any criteria ex. \"Restaurant\" or \"Hotel\"");
-		textField7.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField7.setColumns(10);
-
-		comboBox7 = new JComboBox<String>();
-		comboBox7.setBounds(647, 40, 85, 21);
-		panelCustomSettings.add(comboBox7);
-		comboBox7.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox7.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox7.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		comboBox6 = new JComboBox<String>();
-		comboBox6.setBounds(551, 40, 85, 21);
-		panelCustomSettings.add(comboBox6);
-		comboBox6.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox6.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox6.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		comboBox5 = new JComboBox<String>();
-		comboBox5.setBounds(455, 40, 85, 21);
-		panelCustomSettings.add(comboBox5);
-		comboBox5.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox5.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		comboBox4 = new JComboBox<String>();
-		comboBox4.setBounds(359, 40, 85, 21);
-		panelCustomSettings.add(comboBox4);
-		comboBox4.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox4.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		comboBox3 = new JComboBox<String>();
-		comboBox3.setBounds(263, 40, 85, 21);
-		panelCustomSettings.add(comboBox3);
-		comboBox3.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox3.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		comboBox2 = new JComboBox<String>();
-		comboBox2.setBounds(167, 40, 85, 21);
-		panelCustomSettings.add(comboBox2);
-		comboBox2.setToolTipText("Select the order of importance for you, for the custom interest.");
-		comboBox2.setModel(new DefaultComboBoxModel<String>(new String[] {"Love", "Like", "Indifferent", "Dislike", "Hate"}));
-		comboBox2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		JLabel lblRecommendations = new JLabel("Recommendations");
-		lblRecommendations.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblRecommendations.setBounds(530, 12, 113, 15);
-		contentPane.add(lblRecommendations);
-
-		listRecommended = new JList<>(modelRecommendedCities);
-		listRecommended.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		listRecommended.setToolTipText("List of recommended cities for you. Select a place from the list and click \"COVID Info\" button to get COVID information.");
-		listRecommended.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		listRecommended.setBounds(530, 65, 218, 277);
-		contentPane.add(listRecommended);
-
-		btnCovidInfo = new JButton("COVID info");
-		btnCovidInfo.setToolTipText("Get COVID information for selected place");
-		btnCovidInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCovidInfo.setBounds(531, 353, 218, 23);
-		btnCovidInfo.addMouseListener(this);
-		contentPane.add(btnCovidInfo);
-
-		lblNewLabel_2 = new JLabel("Choose your age range:");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_2.setBounds(273, 152, 131, 15);
-		contentPane.add(lblNewLabel_2);
-
-		comboBoxAgeRange = new JComboBox<String>();
-		comboBoxAgeRange.setModel(new DefaultComboBoxModel<String>(new String[] {"0 - 29", "30 - 59", "60 - 100"}));
-		comboBoxAgeRange.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		comboBoxAgeRange.setBounds(412, 149, 74, 21);
+		comboBoxAgeRange = new JComboBox<>();
+		comboBoxAgeRange.setModel(new DefaultComboBoxModel<>(new String[] {"16-25", "26-60", "61++"}));
+		comboBoxAgeRange.setToolTipText("Select your age group");
+		comboBoxAgeRange.setBounds(344, 9, 72, 22);
+		comboBoxAgeRange.addActionListener(this);
 		contentPane.add(comboBoxAgeRange);
 
+		JLabel labelAge = new JLabel("Age group");
+
+		labelAge.setBounds(276, 12, 56, 16);
+		contentPane.add(labelAge);
+
 		textFieldCityName = new JTextField();
-		textFieldCityName.setToolTipText("Type a city name, ex. Athens");
-		textFieldCityName.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textFieldCityName.setColumns(10);
-		textFieldCityName.setBounds(78, 34, 150, 20);
+
+		textFieldCityName.setBounds(108, 9, 147, 22);
 		contentPane.add(textFieldCityName);
+		textFieldCityName.setColumns(10);
 
-		textFieldCountryCode = new JTextField();
-		textFieldCountryCode.setToolTipText("Country code in ISO 3166 format. (ex. for Greece type GR)");
-		textFieldCountryCode.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textFieldCountryCode.setColumns(10);
-		textFieldCountryCode.setBounds(156, 63, 72, 20);
-		contentPane.add(textFieldCountryCode);
+		JLabel labelChooseCity = new JLabel("City name");
 
-		lblNewLabel_3 = new JLabel("City name:");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_3.setBounds(10, 37, 58, 15);
-		contentPane.add(lblNewLabel_3);
+		labelChooseCity.setBounds(42, 12, 54, 16);
+		contentPane.add(labelChooseCity);
 
-		lblNewLabel_4 = new JLabel("Country Code (optional):");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_4.setBounds(10, 66, 136, 15);
-		contentPane.add(lblNewLabel_4);
+		countryComboBox = new JComboBox<>();
+
+		countryComboBox.setBounds(108, 43, 147, 24);
+		contentPane.add(countryComboBox);
+
+		JLabel labelChooseCountry = new JLabel("Country");
+
+		labelChooseCountry.setBounds(52, 46, 43, 16);
+		contentPane.add(labelChooseCountry);
 
 		btnAdd = new JButton("Add");
-		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnAdd.addMouseListener(this);
-		btnAdd.setBounds(10, 94, 65, 23);
+
+		btnAdd.setBounds(151, 77, 104, 25);
 		contentPane.add(btnAdd);
 
 		btnRemove = new JButton("Remove");
-		btnRemove.setToolTipText("Remove selected city from list");
-		btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnRemove.setBounds(82, 94, 77, 23);
 		btnRemove.addMouseListener(this);
+
+		btnRemove.setBounds(10, 409, 121, 25);
 		contentPane.add(btnRemove);
 
 		btnClear = new JButton("Clear");
-		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnClear.setBounds(166, 94, 62, 23);
 		btnClear.addMouseListener(this);
+
+		btnClear.setBounds(134, 409, 121, 25);
 		contentPane.add(btnClear);
 
+		btnRecommend = new JButton("Recommend");
+		btnRecommend.setBounds(276, 43, 245, 25);
+		btnRecommend.addMouseListener(this);
+		contentPane.add(btnRecommend);
+
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 111, 245, 291);
+		contentPane.add(scrollPane);	
+
+
+		previewItems = new JTable();
+		previewItems.setShowGrid(false);
+		previewItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		previewItems.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"City", "Country"
+				}
+				));
+
+		scrollPane.setViewportView(previewItems);
 		lblStatus = new JLabel("Ready");
-		lblStatus.setForeground(Color.GRAY);
-		lblStatus.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblStatus.setBounds(10, 466, 208, 15);
+
+		lblStatus.setBounds(10, 452, 141, 15);
 		contentPane.add(lblStatus);
 
 		separator_1 = new JSeparator();
-		separator_1.setBounds(0, 461, 763, 2);
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1.setBounds(265, 0, 9, 444);
 		contentPane.add(separator_1);
 
-		comboBoxSorting = new JComboBox<String>();
-		comboBoxSorting.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		comboBoxSorting.setModel(new DefaultComboBoxModel<String>(new String[] {"Sort by score | Ascending", "Sort by score | Descending", "Sort by distance | Ascending", "Sort by distance reversed | Descending", "Sort by time added | Ascending", "Sort by time added reversed | Descending"}));
-		comboBoxSorting.setBounds(530, 33, 218, 21);
+		comboBoxSorting = new JComboBox<>();
+		comboBoxSorting.setModel(new DefaultComboBoxModel<String>(new String[] {"Sort by score | Ascending", "Sort by score | Descending", "Sort by distance | Ascending", "Sort by distance | Descending", "Sort by time added | Ascending", "Sort by time added | Descending"}));
 		comboBoxSorting.addActionListener(this);
+		comboBoxSorting.setBounds(276, 78, 245, 22);
 		contentPane.add(comboBoxSorting);
 
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(276, 111, 245, 291);
+		contentPane.add(scrollPane_1);
+
+
+		recommendedItems = new JTable();
+		recommendedItems.setShowGrid(false);
+		recommendedItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		recommendedItems.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"City", "Country"
+				}
+				));
+
+		scrollPane_1.setViewportView(recommendedItems);
+
+		btnCovidInfo = new JButton("COVID Information");
+		btnCovidInfo.addMouseListener(this);
+
+		btnCovidInfo.setBounds(276, 409, 245, 25);
+		contentPane.add(btnCovidInfo);
+
+		separator_1_1 = new JSeparator();
+		separator_1_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1_1.setBounds(531, 0, 9, 444);
+		contentPane.add(separator_1_1);
+
+		chckbxCustomRecommendation = new JCheckBox("Customize criteria");
+		chckbxCustomRecommendation.setBounds(548, 77, 121, 25);
+		chckbxCustomRecommendation.addMouseListener(this);
+		contentPane.add(chckbxCustomRecommendation);
+
+		JLabel lblNewLabel_1 = new JLabel("Feature 1");
+		lblNewLabel_1.setBounds(554, 141, 48, 16);
+		contentPane.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Feature 2");
+		lblNewLabel_1_1.setBounds(554, 171, 48, 16);
+		contentPane.add(lblNewLabel_1_1);
+
+		JLabel lblNewLabel_1_2 = new JLabel("Feature 3");
+		lblNewLabel_1_2.setBounds(554, 202, 48, 16);
+		contentPane.add(lblNewLabel_1_2);
+
+		JLabel lblNewLabel_1_3 = new JLabel("Feature 4");
+		lblNewLabel_1_3.setBounds(554, 233, 48, 16);
+		contentPane.add(lblNewLabel_1_3);
+
+		JLabel lblNewLabel_1_4 = new JLabel("Feature 5");
+		lblNewLabel_1_4.setBounds(554, 264, 48, 16);
+		contentPane.add(lblNewLabel_1_4);
+
+		JLabel lblNewLabel_1_5 = new JLabel("Feature 6");
+		lblNewLabel_1_5.setBounds(554, 295, 48, 16);
+		contentPane.add(lblNewLabel_1_5);
+
+		JLabel lblNewLabel_1_6 = new JLabel("Feature 7");
+		lblNewLabel_1_6.setBounds(554, 326, 48, 16);
+		contentPane.add(lblNewLabel_1_6);
+
+		textField1 = new JTextField();
+		textField1.setBounds(614, 136, 116, 22);
+		contentPane.add(textField1);
+		textField1.setColumns(10);
+
+		textField2 = new JTextField();
+		textField2.setColumns(10);
+		textField2.setBounds(614, 167, 116, 22);
+		contentPane.add(textField2);
+
+		textField3 = new JTextField();
+		textField3.setColumns(10);
+		textField3.setBounds(614, 198, 116, 22);
+		contentPane.add(textField3);
+
+		textField4 = new JTextField();
+		textField4.setColumns(10);
+		textField4.setBounds(614, 229, 116, 22);
+		contentPane.add(textField4);
+
+		textField5 = new JTextField();
+		textField5.setColumns(10);
+		textField5.setBounds(614, 260, 116, 22);
+		contentPane.add(textField5);
+
+		textField6 = new JTextField();
+		textField6.setColumns(10);
+		textField6.setBounds(614, 291, 116, 22);
+		contentPane.add(textField6);
+
+		textField7 = new JTextField();
+		textField7.setColumns(10);
+		textField7.setBounds(614, 322, 116, 22);
+		contentPane.add(textField7);
+
+		comboBox1 = new JComboBox<>();
+
+		comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox1.setBounds(742, 137, 78, 22);
+		contentPane.add(comboBox1);
+
+		comboBox2 = new JComboBox<>();
+
+		comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox2.setBounds(742, 167, 78, 22);
+		contentPane.add(comboBox2);
+
+		comboBox3 = new JComboBox<>();
+		comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox3.setBounds(742, 198, 78, 22);
+		contentPane.add(comboBox3);
+
+		comboBox4 = new JComboBox<>();
+		comboBox4.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox4.setBounds(742, 229, 78, 22);
+		contentPane.add(comboBox4);
+
+		comboBox5 = new JComboBox<>();
+		comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox5.setBounds(742, 260, 78, 22);
+		contentPane.add(comboBox5);
+
+		comboBox6 = new JComboBox<>();
+		comboBox6.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox6.setBounds(742, 291, 78, 22);
+		contentPane.add(comboBox6);
+
+		comboBox7 = new JComboBox<>();
+		comboBox7.setModel(new DefaultComboBoxModel<>(new String[] {"Very high", "High", "Medium", "Low", "Very low"}));
+		comboBox7.setBounds(742, 322, 78, 22);
+		contentPane.add(comboBox7);
+
 		btnDateTable = new JButton("Date Added");
-		btnDateTable.setBounds(238, 354, 89, 23);
+		btnDateTable.setBounds(543, 409, 95, 25);
 		btnDateTable.addMouseListener(this);
 		contentPane.add(btnDateTable);
-		panelCustomSettings.setVisible(false);
+
+		lblNewLabel_2 = new JLabel("Importance");
+		lblNewLabel_2.setBounds(742, 111, 61, 16);
+		contentPane.add(lblNewLabel_2);
+
+		lblNewLabel_3 = new JLabel("Interest");
+		lblNewLabel_3.setBounds(649, 111, 39, 16);
+		contentPane.add(lblNewLabel_3);
+
+		separator = new JSeparator();
+		separator.setBounds(0, 444, 835, 2);
+		contentPane.add(separator);		
+		
+		countryComboBox.setModel(new DefaultComboBoxModel<>(getAllCountries()));
+		
+		setDefaultFeaturesInTextfields();
+		customFeaturesDisable();
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
 	}
 }

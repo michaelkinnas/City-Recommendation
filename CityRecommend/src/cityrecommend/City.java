@@ -29,7 +29,7 @@ public class City {
 	private String countryCode;
 	
 	private String[] terms;
-	private double[] vectorRepresentation = new double[10];
+	private double[] vectorRepresentation = new double[10]; //{8.7, 9.1, .....
 	private long timestamp;	
 	private AmadeusController covidData;
 	
