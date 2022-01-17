@@ -7,4 +7,8 @@ public interface PerceptronTraveller {
     ArrayList<City> recommend(ArrayList<City> cities, boolean UpLowCased);
     ArrayList<City> getRecCities(); 
     ArrayList<City> sortRecommendations(ArrayList<City> recCities);
+    
+    double[] getWeightBias();
+		
+	
 }

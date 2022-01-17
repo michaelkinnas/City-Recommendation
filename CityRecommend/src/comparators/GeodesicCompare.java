@@ -12,11 +12,11 @@ public class GeodesicCompare implements Comparator<City> {
 	 */
 	@Override
 	public int compare(City o1, City o2) {
-		if (o1.getVectorRepresentation()[9] > o2.getVectorRepresentation()[9]) {
-			return 1;
-		}else if (o1.getVectorRepresentation()[9] < o2.getVectorRepresentation()[9]) {
+		if (o1.getVectorRepresentation()[9] < o2.getVectorRepresentation()[9]) {
 			return -1;
-		}else {
+		} else if (o1.getVectorRepresentation()[9] > o2.getVectorRepresentation()[9]) {
+			return 1;
+		} else {
 			return 0;
 		}
 	}

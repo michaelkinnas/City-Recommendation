@@ -7,9 +7,12 @@ import comparators.TimestampCompare;
 
 public class PerceptronMiddleTraveller implements PerceptronTraveller{
     private double[] weightBias = {0.2,0.1,0.4,-0.2,0.3,0.5,-0.1,0.3,-0.1,0.7};
-    private double bias = -0.7;
+   // private double bias = -1.13;
+    private double bias = 0;
     private ArrayList<City> recCities = new ArrayList<>();
+   
     
+   
     /**
 	 * Retrieves an Array.
 	 * @return  weightBias Array.
@@ -56,12 +59,15 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 	 * @return An ArraList of City Objects.
 	 */
     public ArrayList<City> recommend(ArrayList<City> cities) {
-		ArrayList<City> tempArray = new ArrayList<>();
+    	ArrayList<City> tempArray = new ArrayList<>();
+		double score = 0;
 		for (int i = 0; i < cities.size(); i++) {
 			tempArray.add(new City(cities.get(i)));
 		}
 		for (int i = 0; i < tempArray.size(); i++) {
-			if (sumVector(tempArray.get(i).getVectorRepresentation()) > 0){
+			score = sumVector(tempArray.get(i).getVectorRepresentation());
+			if (score > 0){
+				tempArray.get(i).setScore(score);
 				recCities.add(tempArray.get(i));
 			}
 		}
@@ -83,6 +89,7 @@ public class PerceptronMiddleTraveller implements PerceptronTraveller{
 			tempMatrix[i] = tempMatrix[i] * weightBias[i];
 			sum += tempMatrix[i];
 		}
+		
 		return sum += bias;
 	}
     
