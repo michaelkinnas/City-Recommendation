@@ -211,6 +211,8 @@ public class City {
 			throw new OpenWeatherCityNotFoundException(this.cityName);
 		}
 		OpenWeatherMap weather_obj = mapper.readValue(response.body(), OpenWeatherMap.class);
+		
+		cityName =  weather_obj.getName();
 		countryCode = weather_obj.getSys().getCountry();		
 		
 		this.vectorRepresentation[7] = featureNormalizer(weather_obj.getMain().getTemp(), TEMPMAX, TEMPMIN);			
@@ -232,16 +234,9 @@ public class City {
 	 * @throws InterruptedException
 	 * @throws FoursquareNoCityException 
 	 */	
-	private FourSquareController getVenuesFromLocation(String auth, String query, String location, String countryCode, int limit, String sort) throws IOException, InterruptedException, FoursquareNoCityException {
-		String requestURL;
-
-		if (countryCode == null) {
-			requestURL = "https://api.foursquare.com/v3/places/search?query=" + query + "&near=" + location + "&limit=" + limit + "&sort=" + sort;
-		} else {
-			requestURL = "https://api.foursquare.com/v3/places/search?query=" + query + "&near=" + location + "," + countryCode +"&limit=" + limit + "&sort=" + sort;		
-		}		
+	private FourSquareController getVenuesFromLocation(String auth, String query, String location, String countryCode, int limit, String sort) throws IOException, InterruptedException, FoursquareNoCityException {			
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(requestURL))
+				.uri(URI.create("https://api.foursquare.com/v3/places/search?query=" + query + "&near=" + location + "," + countryCode +"&limit=" + limit + "&sort=" + sort))
 				.header("Accept", "application/json")
 				.header("Authorization", auth)
 				.method("GET", HttpRequest.BodyPublishers.noBody())
@@ -337,6 +332,7 @@ public class City {
 	 * @param Double array. The city features.
 	 * @return Double array. The normalized vector.
 	 */
+	/*
 	public void normalise() {		
 		for (int i =0; i < 7; i++) {
 			this.vectorRepresentation[i] = this.vectorRepresentation[i] / 10;
@@ -345,7 +341,7 @@ public class City {
 		this.vectorRepresentation[8] = this.vectorRepresentation[8] / 100;                                             	//case of cloud coverage         
 		this.vectorRepresentation[9] = this.vectorRepresentation[9] / MAXDIST;                      					//case of cities distance
 
-	}
+	}*/
 	/**
 	 * Helper to the normalizedFeatures method.
 	 * @author it22046
@@ -362,9 +358,7 @@ public class City {
 	/**
 	 * Setters and getters below this point
 	 * 
-	 */
-	
-	
+	 */	
 	public String getCityName() {
 		return cityName;
 	}

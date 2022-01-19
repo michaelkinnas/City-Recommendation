@@ -67,8 +67,8 @@ public class PerceptronYoungTraveller implements PerceptronTraveller{
 		for (int i = 0; i < tempArray.size(); i++) {
 			score = sumVector(tempArray.get(i).getVectorRepresentation());
 			if (score > 0){
-				tempArray.get(i).setScore(score);
-				recCities.add(tempArray.get(i));
+				tempArray.get(i).setScore(score);		
+				recCities.add(tempArray.get(i));				
 			}
 		}
 		return recCities;
