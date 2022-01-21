@@ -353,7 +353,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	}
 
 
-
+	/**
+	 * Returns true if at least one of the custom keywords text fields is empty.
+	 * @return Boolean
+	 */
 	private boolean allKeywordsAreNotFilled() {
 		if (textField1.getText().equals("") || textField2.getText().equals("") || textField3.getText().equals("") ||
 			textField4.getText().equals("") || textField5.getText().equals("") || textField6.getText().equals("") || 
@@ -362,7 +365,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Sets importance levels of combo boxes
+	 */
 	private void restoreUserSelectedImportanceSettings() {
 		comboBox1.setSelectedIndex(weightsToImportanceLevel(0));
 		comboBox2.setSelectedIndex(weightsToImportanceLevel(1));
@@ -373,7 +379,13 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBox7.setSelectedIndex(weightsToImportanceLevel(6));
 
 	}
-
+	
+	/**
+	 * Converts from decimal number of the term bias to the 5 point integer index
+	 * used by importance combo boxes
+	 * @param The index of the term bias
+	 * @return An integer from 0 to 4
+	 */
 	private int weightsToImportanceLevel(int index) {		
 		if (customTermsBias[index] == 1) {
 			return 0; 
@@ -388,7 +400,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}	
 
 	}
-
+	
+	/**
+	 * Sets the text in the custom keyword text fields according to custom terms vector
+	 */
 	private void restoreUserSelectedFeaturesInTextfields() {	
 		textField1.setText(customTerms[0]);
 		textField2.setText(customTerms[1]);
@@ -507,7 +522,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			}
 		}
 		
-		//DEBUG
+		//FOR DEBUGGING
+		//Prints the score vector of each city
+		/*
 		for(City city: cities) {
 			System.out.print(city.getCityName() + " data source: " + city.getDataSource() + ": ");
 			for (int i =0; i < city.getVectorRepresentation().length; i++) {
@@ -515,13 +532,14 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			}			
 			System.out.println();
 		}
+		*/
 
 	}
 
 
 	/**
 	 * Creates PerceptronTraveller objects and calls their recommend methods
-	 * for all Preceptrons.
+	 * for all Perceptrons.
 	 */
 	private void makeRecommendations() {
 		if (chckbxCustomRecommendation.isSelected()) {
@@ -569,7 +587,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			displayResults();			
 		}		
 	}
-
+	
+	/**
+	 * Clears all custom text fields.
+	 */
 	private void emptyCustomizedTextfields() {		
 		textField1.setText("");
 		textField2.setText("");
@@ -580,7 +601,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		textField7.setText("");		
 	}
 
-
+	/**
+	 * It disables all 7 custom text fields and custom importance levels combo boxes
+	 */
 	public void customFeaturesDisable() {		
 		textField1.setEnabled(false);
 		textField2.setEnabled(false);
@@ -597,7 +620,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBox6.setEnabled(false);
 		comboBox7.setEnabled(false);
 	}
-
+	
+	/**
+	 * It enables all 7 custom text fields and all 7 custom importance level comboboxes
+	 */
 	public void customFeaturesEnable() {
 		textField1.setEnabled(true);
 		textField2.setEnabled(true);
@@ -765,13 +791,14 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		return countries;
 	}
 
-	
+	/**
+	 * It creates a Hashmap used to lookup the country full name given a country two letter code
+	 */
 	private void createCountriesCodeHashMapLookUpTable() {		
 		String[] CountryISOList = Locale.getISOCountries();
 		countryCodesAndNamesLookUp = new HashMap<>();
 		ArrayList<String> temp = new ArrayList<>();
 		
-		//temp.add("-");
 		for (int i =0; i < CountryISOList.length; i++) {
 			Locale locale = new Locale("", CountryISOList[i]);			
 			countryCodesAndNamesLookUp.put(locale.getCountry(), locale.getDisplayCountry(Locale.ENGLISH));
@@ -831,7 +858,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		ArrayList<City> cities = mapper.readValue(filename, new TypeReference<ArrayList<City>>(){});		
 		return cities;    
 	}
-
+	
+	/**
+	 * Sets default features in the custom text fields
+	 */
 	public void setDefaultFeaturesInTextfields() {        
 		textField1.setText(DEFAULT_TERMS[0]);
 		textField2.setText(DEFAULT_TERMS[1]);
@@ -841,7 +871,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		textField6.setText(DEFAULT_TERMS[5]);
 		textField7.setText(DEFAULT_TERMS[6]);
 	}
-
+	
+	/**
+	 * Sets default combo box importance level
+	 */
 	private void setDefaultComboBoxImportance() {
 		comboBox1.setSelectedIndex(setCategoryAccordingToWeights(0));
 		comboBox2.setSelectedIndex(setCategoryAccordingToWeights(1));

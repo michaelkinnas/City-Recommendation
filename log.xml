@@ -2106,3 +2106,91 @@
   <message>Saved data.</message>
 </record>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-20T13:29:21.781782600Z</date>
+  <millis>1642685361781</millis>
+  <nanos>782600</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-20T13:29:21.999900700Z</date>
+  <millis>1642685361999</millis>
+  <nanos>900700</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-20T13:29:21.999900700Z</date>
+  <millis>1642685361999</millis>
+  <nanos>900700</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-20T13:29:22.356823Z</date>
+  <millis>1642685362356</millis>
+  <nanos>823000</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-20T13:29:23.956332400Z</date>
+  <millis>1642685363956</millis>
+  <nanos>332400</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-20T13:46:19.837360100Z</date>
+  <millis>1642686379837</millis>
+  <nanos>360100</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-20T13:46:19.876399200Z</date>
+  <millis>1642686379876</millis>
+  <nanos>399200</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
