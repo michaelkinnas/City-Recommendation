@@ -2,6 +2,7 @@ package cityrecommend;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,7 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 
-public class DateAdded extends JFrame {
+public class DateAddedFrame extends JFrame {
 
 	/**
 	 * 
@@ -24,8 +25,9 @@ public class DateAdded extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DateAdded(Object[][] data) {
+	public DateAddedFrame(Object[][] data) {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/MainIcon.png")));
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
