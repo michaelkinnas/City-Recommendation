@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-23T15:25:37.923440100Z</date>
+  <millis>1642951537923</millis>
+  <nanos>440100</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-23T15:25:38.157942400Z</date>
+  <millis>1642951538157</millis>
+  <nanos>942400</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-23T15:25:38.158941900Z</date>
+  <millis>1642951538158</millis>
+  <nanos>941900</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-23T15:25:40.581099300Z</date>
+  <millis>1642951540581</millis>
+  <nanos>99300</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>SEVERE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Could not read from file. Reason given: Cannot construct instance of `amadeus.Area`, problem: Unresolved compilation problems: 
+	The import javax.annotation.Generated cannot be resolved
+	Generated cannot be resolved to a type
+
+ at [Source: (File); line: 15, column: 9] (through reference chain: java.util.ArrayList[0]-&gt;cityrecommend.City["covidData"]-&gt;amadeus.AmadeusController["data"]-&gt;amadeus.Data["area"])</message>
+</record>
+<record>
+  <date>2022-01-23T15:25:49.093687Z</date>
+  <millis>1642951549093</millis>
+  <nanos>687000</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-23T15:25:49.099705500Z</date>
+  <millis>1642951549099</millis>
+  <nanos>705500</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>

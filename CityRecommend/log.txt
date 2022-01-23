@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-23T12:17:38.565412300Z</date>
+  <millis>1642940258565</millis>
+  <nanos>412300</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:38.743789200Z</date>
+  <millis>1642940258743</millis>
+  <nanos>789200</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:38.743789200Z</date>
+  <millis>1642940258743</millis>
+  <nanos>789200</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:39.028975700Z</date>
+  <millis>1642940259028</millis>
+  <nanos>975700</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:41.251229Z</date>
+  <millis>1642940261251</millis>
+  <nanos>229000</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:41.251229Z</date>
+  <millis>1642940261251</millis>
+  <nanos>229000</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>WARNING</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button without selecting a city first.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:44.398384600Z</date>
+  <millis>1642940264398</millis>
+  <nanos>384600</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:44.398384600Z</date>
+  <millis>1642940264398</millis>
+  <nanos>384600</nanos>
+  <sequence>7</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Removed city.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:52.664283900Z</date>
+  <millis>1642940272664</millis>
+  <nanos>283900</nanos>
+  <sequence>8</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:52.679876300Z</date>
+  <millis>1642940272679</millis>
+  <nanos>876300</nanos>
+  <sequence>9</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Removed city.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:54.755235500Z</date>
+  <millis>1642940274755</millis>
+  <nanos>235500</nanos>
+  <sequence>10</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:54.755235500Z</date>
+  <millis>1642940274755</millis>
+  <nanos>235500</nanos>
+  <sequence>11</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Removed city.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:56.946517Z</date>
+  <millis>1642940276946</millis>
+  <nanos>517000</nanos>
+  <sequence>12</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Remove button.</message>
+</record>
+<record>
+  <date>2022-01-23T12:17:56.946517Z</date>
+  <millis>1642940276946</millis>
+  <nanos>517000</nanos>
+  <sequence>13</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Removed city.</message>
+</record>
