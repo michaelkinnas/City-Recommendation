@@ -328,7 +328,18 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				LOGGER.log(Level.WARNING, "Clicked COVID info button without selecting cities.");
 			} else {
 				cvframe.setTextAreaText("");
-				City city = cities.get(index);				
+				City city;// = recommendedYoung.get(0);
+				if (chckbxCustomRecommendation.isSelected()) {
+					city = recommendedCustom.get(index);
+				} else if (comboBoxAgeRange.getSelectedIndex() == 0) {
+					city = recommendedYoung.get(index);
+				} else if (comboBoxAgeRange.getSelectedIndex() == 1){
+					city = recommendedMiddle.get(index);
+				} else {
+					city = recommendedElder.get(index);
+				}
+				
+								
 				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + city.getCountryCode());
 				setCovidData(city);
 				cvframe.setVisible(true);
@@ -582,7 +593,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			} else if (comboBoxSorting.getSelectedIndex() == 4) {
 				sortRecommendations(new TimestampCompare());				
 			} else if (comboBoxSorting.getSelectedIndex() == 5) {
-				sortRecommendations(new GeodesicCompare().reversed());
+				sortRecommendations(new TimestampCompare().reversed());
 			}
 			displayResults();			
 		}		
@@ -1405,7 +1416,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		countryComboBox.setModel(new DefaultComboBoxModel<>(createCountriesList()));
 		
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\mkinn\\Desktop\\java graphics\\map-pin.png"));
+		lblNewLabel.setIcon(new ImageIcon(ControllerGUI.class.getResource("/graphics/map-pin.png")));
 		lblNewLabel.setBounds(735, 374, 100, 100);
 		contentPane.add(lblNewLabel);
 		
