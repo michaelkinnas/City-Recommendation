@@ -340,7 +340,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				}
 				
 								
-				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + city.getCountryCode());
+				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + countryCodesAndNamesLookUp.get(city.getCountryCode()));
 				setCovidData(city);
 				cvframe.setVisible(true);
 			}			
@@ -437,7 +437,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				System.out.println("Started thread for " + city.getCityName());			//DEBUG	
+				//System.out.println("Started thread for " + city.getCityName());			//DEBUG	
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
 				city.retrieveCovidData();
@@ -445,7 +445,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				return null;
 			}
 			protected void done() {
-				System.out.println("Thread finished"); //DEBUG
+				//System.out.println("Thread finished"); //DEBUG
 				retrieveDataSemaphoreDown();
 			}
 		};
