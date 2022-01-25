@@ -51,6 +51,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import comparators.GeodesicCompare;
 import comparators.ScoreCompare;
 import comparators.TimestampCompare;
+import exceptions.AmadeusErrorException;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -431,21 +432,31 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * @param A String[] array of the keywords for the terms
 	 * @param An integer for the dataSource used (1 or 2)
 	 */
-	private void retrieveCityData(City city, String[] terms, int dataSource) {
-		LOGGER.log(Level.FINE, "Started retrieve data thread.");
+	private synchronized void retrieveCityData(City city, String[] terms, int dataSource) {
+		//LOGGER.log(Level.FINE, "Started retrieve data thread.");
 		
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				//System.out.println("Started thread for " + city.getCityName());			//DEBUG	
+				
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
-				city.retrieveCovidData();
-				city.setDataSource(dataSource);				
+				
+				
+				
+				
 				return null;
 			}
 			protected void done() {
 				//System.out.println("Thread finished"); //DEBUG
+				city.setDataSource(dataSource);
+				try {
+					city.retrieveCovidData();
+				} catch (IOException | InterruptedException | AmadeusErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				retrieveDataSemaphoreDown();
 			}
 		};
@@ -458,7 +469,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreUp() {
 		this.retrieveDataSemaphore++;
-		System.out.println("Semaphore is now " + retrieveDataSemaphore);
+		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		this.btnRecommend.setEnabled(false);	
 		this.lblStatus.setText("Please wait, working...");
 	}
@@ -470,7 +481,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreDown() {
 		this.retrieveDataSemaphore--; //if retrieve data threads have finished run the recommendation perceptrons		
-		System.out.println("Semaphore is now " + retrieveDataSemaphore);
+		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		if (retrieveDataSemaphore == 0) {
 			makeRecommendations();
 			sortRecommendations(new ScoreCompare().reversed());
@@ -542,8 +553,11 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				System.out.printf("%.2f, ", city.getVectorRepresentation()[i]);
 			}			
 			System.out.println();
-		}
-		*/
+			
+		}*/
+		
+		
+		
 
 	}
 
@@ -1144,6 +1158,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				.map(string -> string.replace("</a>", ""))
 				.map(string -> string.replace("<span>", ""))
 				.map(string -> string.replace("</span>", ""))
+				.map(string -> string.replace("<ul>", ""))
+				.map(string -> string.replace("<li>", ""))
+				.map(string -> string.replace("</li>", ""))
+				.map(string -> string.replace("</ul>", ""))
 				.collect(Collectors.toList());
 
 		String filteredStr = filteredElements.stream().filter(string -> !string.isEmpty()).collect(Collectors.joining());

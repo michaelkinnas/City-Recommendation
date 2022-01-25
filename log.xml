@@ -5062,3 +5062,1694 @@
   <message>Saved data.</message>
 </record>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T10:04:49.511297500Z</date>
+  <millis>1643105089511</millis>
+  <nanos>297500</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T10:04:49.712424700Z</date>
+  <millis>1643105089712</millis>
+  <nanos>424700</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T10:04:49.712424700Z</date>
+  <millis>1643105089712</millis>
+  <nanos>424700</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T10:04:49.994647600Z</date>
+  <millis>1643105089994</millis>
+  <nanos>647600</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T10:21:13.124763600Z</date>
+  <millis>1643106073124</millis>
+  <nanos>763600</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:21:13.165068600Z</date>
+  <millis>1643106073165</millis>
+  <nanos>68600</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T10:27:47.991912900Z</date>
+  <millis>1643106467991</millis>
+  <nanos>912900</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:48.192006800Z</date>
+  <millis>1643106468192</millis>
+  <nanos>6800</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:48.192006800Z</date>
+  <millis>1643106468192</millis>
+  <nanos>6800</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:48.421879Z</date>
+  <millis>1643106468421</millis>
+  <nanos>879000</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:49.848804100Z</date>
+  <millis>1643106469848</millis>
+  <nanos>804100</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:49.849794800Z</date>
+  <millis>1643106469849</millis>
+  <nanos>794800</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:55.465478600Z</date>
+  <millis>1643106475465</millis>
+  <nanos>478600</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:27:55.501219100Z</date>
+  <millis>1643106475501</millis>
+  <nanos>219100</nanos>
+  <sequence>7</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T10:55:28.986894900Z</date>
+  <millis>1643108128986</millis>
+  <nanos>894900</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:29.189150800Z</date>
+  <millis>1643108129189</millis>
+  <nanos>150800</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:29.189150800Z</date>
+  <millis>1643108129189</millis>
+  <nanos>150800</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:29.423690500Z</date>
+  <millis>1643108129423</millis>
+  <nanos>690500</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:30.631211800Z</date>
+  <millis>1643108130631</millis>
+  <nanos>211800</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:31.583208800Z</date>
+  <millis>1643108131583</millis>
+  <nanos>208800</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:52.586597600Z</date>
+  <millis>1643108152586</millis>
+  <nanos>597600</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:54.962798600Z</date>
+  <millis>1643108154962</millis>
+  <nanos>798600</nanos>
+  <sequence>7</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:55:57.793962500Z</date>
+  <millis>1643108157793</millis>
+  <nanos>962500</nanos>
+  <sequence>8</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:02.474980500Z</date>
+  <millis>1643108162474</millis>
+  <nanos>980500</nanos>
+  <sequence>9</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:30.197985400Z</date>
+  <millis>1643108190197</millis>
+  <nanos>985400</nanos>
+  <sequence>10</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:34.646512Z</date>
+  <millis>1643108194646</millis>
+  <nanos>512000</nanos>
+  <sequence>11</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:42.428946900Z</date>
+  <millis>1643108202428</millis>
+  <nanos>946900</nanos>
+  <sequence>12</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:48.067883500Z</date>
+  <millis>1643108208067</millis>
+  <nanos>883500</nanos>
+  <sequence>13</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:57.290789800Z</date>
+  <millis>1643108217290</millis>
+  <nanos>789800</nanos>
+  <sequence>14</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:56:57.330284Z</date>
+  <millis>1643108217330</millis>
+  <nanos>284000</nanos>
+  <sequence>15</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T10:58:00.693816Z</date>
+  <millis>1643108280693</millis>
+  <nanos>816000</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:00.895681300Z</date>
+  <millis>1643108280895</millis>
+  <nanos>681300</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:00.896681200Z</date>
+  <millis>1643108280896</millis>
+  <nanos>681200</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:01.122421400Z</date>
+  <millis>1643108281122</millis>
+  <nanos>421400</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:01.915625400Z</date>
+  <millis>1643108281915</millis>
+  <nanos>625400</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Date button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:20.450966200Z</date>
+  <millis>1643108300450</millis>
+  <nanos>966200</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-25T10:58:20.491901800Z</date>
+  <millis>1643108300491</millis>
+  <nanos>901800</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T11:10:27.935658600Z</date>
+  <millis>1643109027935</millis>
+  <nanos>658600</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T11:10:28.138350400Z</date>
+  <millis>1643109028138</millis>
+  <nanos>350400</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T11:10:28.138350400Z</date>
+  <millis>1643109028138</millis>
+  <nanos>350400</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T11:10:28.360755200Z</date>
+  <millis>1643109028360</millis>
+  <nanos>755200</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T11:10:55.601798700Z</date>
+  <millis>1643109055601</millis>
+  <nanos>798700</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:10:55.601798700Z</date>
+  <millis>1643109055601</millis>
+  <nanos>798700</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:11.441066100Z</date>
+  <millis>1643109071441</millis>
+  <nanos>66100</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:11.442062900Z</date>
+  <millis>1643109071442</millis>
+  <nanos>62900</nanos>
+  <sequence>7</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:27.280988600Z</date>
+  <millis>1643109087280</millis>
+  <nanos>988600</nanos>
+  <sequence>8</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:27.280988600Z</date>
+  <millis>1643109087280</millis>
+  <nanos>988600</nanos>
+  <sequence>9</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:27.281962800Z</date>
+  <millis>1643109087281</millis>
+  <nanos>962800</nanos>
+  <sequence>10</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:27.281962800Z</date>
+  <millis>1643109087281</millis>
+  <nanos>962800</nanos>
+  <sequence>11</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:11:27.282960400Z</date>
+  <millis>1643109087282</millis>
+  <nanos>960400</nanos>
+  <sequence>12</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:01.715155700Z</date>
+  <millis>1643109121715</millis>
+  <nanos>155700</nanos>
+  <sequence>13</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:01.715155700Z</date>
+  <millis>1643109121715</millis>
+  <nanos>155700</nanos>
+  <sequence>14</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:01.716153400Z</date>
+  <millis>1643109121716</millis>
+  <nanos>153400</nanos>
+  <sequence>15</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:01.717150300Z</date>
+  <millis>1643109121717</millis>
+  <nanos>150300</nanos>
+  <sequence>16</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:01.717150300Z</date>
+  <millis>1643109121717</millis>
+  <nanos>150300</nanos>
+  <sequence>17</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:12.079189700Z</date>
+  <millis>1643109132079</millis>
+  <nanos>189700</nanos>
+  <sequence>18</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:12.079189700Z</date>
+  <millis>1643109132079</millis>
+  <nanos>189700</nanos>
+  <sequence>19</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:12.080187500Z</date>
+  <millis>1643109132080</millis>
+  <nanos>187500</nanos>
+  <sequence>20</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:12.080187500Z</date>
+  <millis>1643109132080</millis>
+  <nanos>187500</nanos>
+  <sequence>21</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:12.081184900Z</date>
+  <millis>1643109132081</millis>
+  <nanos>184900</nanos>
+  <sequence>22</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:19.618965500Z</date>
+  <millis>1643109139618</millis>
+  <nanos>965500</nanos>
+  <sequence>23</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:19.618965500Z</date>
+  <millis>1643109139618</millis>
+  <nanos>965500</nanos>
+  <sequence>24</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:19.619963800Z</date>
+  <millis>1643109139619</millis>
+  <nanos>963800</nanos>
+  <sequence>25</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:19.619963800Z</date>
+  <millis>1643109139619</millis>
+  <nanos>963800</nanos>
+  <sequence>26</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:19.619963800Z</date>
+  <millis>1643109139619</millis>
+  <nanos>963800</nanos>
+  <sequence>27</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:22.657343600Z</date>
+  <millis>1643109142657</millis>
+  <nanos>343600</nanos>
+  <sequence>28</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:22.657343600Z</date>
+  <millis>1643109142657</millis>
+  <nanos>343600</nanos>
+  <sequence>29</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:22.659307900Z</date>
+  <millis>1643109142659</millis>
+  <nanos>307900</nanos>
+  <sequence>30</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:22.659307900Z</date>
+  <millis>1643109142659</millis>
+  <nanos>307900</nanos>
+  <sequence>31</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:22.659307900Z</date>
+  <millis>1643109142659</millis>
+  <nanos>307900</nanos>
+  <sequence>32</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:27.070088700Z</date>
+  <millis>1643109147070</millis>
+  <nanos>88700</nanos>
+  <sequence>33</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:27.070088700Z</date>
+  <millis>1643109147070</millis>
+  <nanos>88700</nanos>
+  <sequence>34</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:27.071085600Z</date>
+  <millis>1643109147071</millis>
+  <nanos>85600</nanos>
+  <sequence>35</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:27.071085600Z</date>
+  <millis>1643109147071</millis>
+  <nanos>85600</nanos>
+  <sequence>36</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:27.071085600Z</date>
+  <millis>1643109147071</millis>
+  <nanos>85600</nanos>
+  <sequence>37</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:30.460018600Z</date>
+  <millis>1643109150460</millis>
+  <nanos>18600</nanos>
+  <sequence>38</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:33.135087600Z</date>
+  <millis>1643109153135</millis>
+  <nanos>87600</nanos>
+  <sequence>39</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:49.374437800Z</date>
+  <millis>1643109169374</millis>
+  <nanos>437800</nanos>
+  <sequence>40</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:49.374437800Z</date>
+  <millis>1643109169374</millis>
+  <nanos>437800</nanos>
+  <sequence>41</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:49.375436200Z</date>
+  <millis>1643109169375</millis>
+  <nanos>436200</nanos>
+  <sequence>42</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:49.375436200Z</date>
+  <millis>1643109169375</millis>
+  <nanos>436200</nanos>
+  <sequence>43</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:49.375436200Z</date>
+  <millis>1643109169375</millis>
+  <nanos>436200</nanos>
+  <sequence>44</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:12:54.086168500Z</date>
+  <millis>1643109174086</millis>
+  <nanos>168500</nanos>
+  <sequence>45</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Clear button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:00.706284700Z</date>
+  <millis>1643109180706</millis>
+  <nanos>284700</nanos>
+  <sequence>46</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:00.707235600Z</date>
+  <millis>1643109180707</millis>
+  <nanos>235600</nanos>
+  <sequence>47</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:04.735405300Z</date>
+  <millis>1643109184735</millis>
+  <nanos>405300</nanos>
+  <sequence>48</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:04.735405300Z</date>
+  <millis>1643109184735</millis>
+  <nanos>405300</nanos>
+  <sequence>49</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:11.823852300Z</date>
+  <millis>1643109191823</millis>
+  <nanos>852300</nanos>
+  <sequence>50</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Add button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:11.823852300Z</date>
+  <millis>1643109191823</millis>
+  <nanos>852300</nanos>
+  <sequence>51</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>addCity</method>
+  <thread>18</thread>
+  <message>Started add city thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.909064300Z</date>
+  <millis>1643109192909</millis>
+  <nanos>64300</nanos>
+  <sequence>52</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.909064300Z</date>
+  <millis>1643109192909</millis>
+  <nanos>64300</nanos>
+  <sequence>53</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.910087300Z</date>
+  <millis>1643109192910</millis>
+  <nanos>87300</nanos>
+  <sequence>54</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.910087300Z</date>
+  <millis>1643109192910</millis>
+  <nanos>87300</nanos>
+  <sequence>55</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.910087300Z</date>
+  <millis>1643109192910</millis>
+  <nanos>87300</nanos>
+  <sequence>56</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.910087300Z</date>
+  <millis>1643109192910</millis>
+  <nanos>87300</nanos>
+  <sequence>57</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:12.911061300Z</date>
+  <millis>1643109192911</millis>
+  <nanos>61300</nanos>
+  <sequence>58</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.769179500Z</date>
+  <millis>1643109203769</millis>
+  <nanos>179500</nanos>
+  <sequence>59</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.769179500Z</date>
+  <millis>1643109203769</millis>
+  <nanos>179500</nanos>
+  <sequence>60</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.770175300Z</date>
+  <millis>1643109203770</millis>
+  <nanos>175300</nanos>
+  <sequence>61</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.770175300Z</date>
+  <millis>1643109203770</millis>
+  <nanos>175300</nanos>
+  <sequence>62</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.770175300Z</date>
+  <millis>1643109203770</millis>
+  <nanos>175300</nanos>
+  <sequence>63</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.771172700Z</date>
+  <millis>1643109203771</millis>
+  <nanos>172700</nanos>
+  <sequence>64</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:23.771172700Z</date>
+  <millis>1643109203771</millis>
+  <nanos>172700</nanos>
+  <sequence>65</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.580063Z</date>
+  <millis>1643109217580</millis>
+  <nanos>63000</nanos>
+  <sequence>66</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.580063Z</date>
+  <millis>1643109217580</millis>
+  <nanos>63000</nanos>
+  <sequence>67</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.581003600Z</date>
+  <millis>1643109217581</millis>
+  <nanos>3600</nanos>
+  <sequence>68</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.581003600Z</date>
+  <millis>1643109217581</millis>
+  <nanos>3600</nanos>
+  <sequence>69</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.581003600Z</date>
+  <millis>1643109217581</millis>
+  <nanos>3600</nanos>
+  <sequence>70</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.582021600Z</date>
+  <millis>1643109217582</millis>
+  <nanos>21600</nanos>
+  <sequence>71</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:37.582021600Z</date>
+  <millis>1643109217582</millis>
+  <nanos>21600</nanos>
+  <sequence>72</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:44.532114900Z</date>
+  <millis>1643109224532</millis>
+  <nanos>114900</nanos>
+  <sequence>73</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:45.702733600Z</date>
+  <millis>1643109225702</millis>
+  <nanos>733600</nanos>
+  <sequence>74</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked COVID info button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:50.848731Z</date>
+  <millis>1643109230848</millis>
+  <nanos>731000</nanos>
+  <sequence>75</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Clicked close button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:50.863690900Z</date>
+  <millis>1643109230863</millis>
+  <nanos>690900</nanos>
+  <sequence>76</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>windowClosing</method>
+  <thread>18</thread>
+  <message>Saved data.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-01-25T11:13:53.145374200Z</date>
+  <millis>1643109233145</millis>
+  <nanos>374200</nanos>
+  <sequence>0</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>CONFIG</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Configuration done.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:53.345397700Z</date>
+  <millis>1643109233345</millis>
+  <nanos>397700</nanos>
+  <sequence>1</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Drew interface</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:53.346395Z</date>
+  <millis>1643109233346</millis>
+  <nanos>395000</nanos>
+  <sequence>2</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Trying to read from file.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:53.560629100Z</date>
+  <millis>1643109233560</millis>
+  <nanos>629100</nanos>
+  <sequence>3</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>&lt;init&gt;</method>
+  <thread>18</thread>
+  <message>Succesfully read from file</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.218962800Z</date>
+  <millis>1643109236218</millis>
+  <nanos>962800</nanos>
+  <sequence>4</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.218962800Z</date>
+  <millis>1643109236218</millis>
+  <nanos>962800</nanos>
+  <sequence>5</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.219962200Z</date>
+  <millis>1643109236219</millis>
+  <nanos>962200</nanos>
+  <sequence>6</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.222973100Z</date>
+  <millis>1643109236222</millis>
+  <nanos>973100</nanos>
+  <sequence>7</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.222973100Z</date>
+  <millis>1643109236222</millis>
+  <nanos>973100</nanos>
+  <sequence>8</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.222973100Z</date>
+  <millis>1643109236222</millis>
+  <nanos>973100</nanos>
+  <sequence>9</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:13:56.222973100Z</date>
+  <millis>1643109236222</millis>
+  <nanos>973100</nanos>
+  <sequence>10</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.496320500Z</date>
+  <millis>1643109248496</millis>
+  <nanos>320500</nanos>
+  <sequence>11</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.496320500Z</date>
+  <millis>1643109248496</millis>
+  <nanos>320500</nanos>
+  <sequence>12</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.497346300Z</date>
+  <millis>1643109248497</millis>
+  <nanos>346300</nanos>
+  <sequence>13</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.498344100Z</date>
+  <millis>1643109248498</millis>
+  <nanos>344100</nanos>
+  <sequence>14</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.498344100Z</date>
+  <millis>1643109248498</millis>
+  <nanos>344100</nanos>
+  <sequence>15</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.498344100Z</date>
+  <millis>1643109248498</millis>
+  <nanos>344100</nanos>
+  <sequence>16</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:08.498344100Z</date>
+  <millis>1643109248498</millis>
+  <nanos>344100</nanos>
+  <sequence>17</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.078091900Z</date>
+  <millis>1643109257078</millis>
+  <nanos>91900</nanos>
+  <sequence>18</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Clicked Recommend button.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.078966200Z</date>
+  <millis>1643109257078</millis>
+  <nanos>966200</nanos>
+  <sequence>19</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.078966200Z</date>
+  <millis>1643109257078</millis>
+  <nanos>966200</nanos>
+  <sequence>20</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.079985500Z</date>
+  <millis>1643109257079</millis>
+  <nanos>985500</nanos>
+  <sequence>21</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.079985500Z</date>
+  <millis>1643109257079</millis>
+  <nanos>985500</nanos>
+  <sequence>22</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.079985500Z</date>
+  <millis>1643109257079</millis>
+  <nanos>985500</nanos>
+  <sequence>23</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>mouseClicked</method>
+  <thread>18</thread>
+  <message>Retrieving data for cities with custom data.</message>
+</record>
+<record>
+  <date>2022-01-25T11:14:17.079985500Z</date>
+  <millis>1643109257079</millis>
+  <nanos>985500</nanos>
+  <sequence>24</sequence>
+  <logger>cityrecommend.ControllerGUI</logger>
+  <level>FINE</level>
+  <class>cityrecommend.ControllerGUI</class>
+  <method>retrieveCityData</method>
+  <thread>18</thread>
+  <message>Started retrieve data thread.</message>
+</record>
