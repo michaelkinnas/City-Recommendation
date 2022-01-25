@@ -338,8 +338,19 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
                             displayResults();			
                             //it22165 END
 				cvframe.setTextAreaText("");
-				City city = cities.get(index);				
-				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + city.getCountryCode());
+				City city;// = recommendedYoung.get(0);
+				if (chckbxCustomRecommendation.isSelected()) {
+					city = recommendedCustom.get(index);
+				} else if (comboBoxAgeRange.getSelectedIndex() == 0) {
+					city = recommendedYoung.get(index);
+				} else if (comboBoxAgeRange.getSelectedIndex() == 1){
+					city = recommendedMiddle.get(index);
+				} else {
+					city = recommendedElder.get(index);
+				}
+				
+								
+				cvframe.setTitle("COVID19 information for " + city.getCityName() + ", " + countryCodesAndNamesLookUp.get(city.getCountryCode()));
 				setCovidData(city);
 				cvframe.setVisible(true);
 			}			
@@ -420,13 +431,15 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
+				//System.out.println("Started thread for " + city.getCityName());			//DEBUG	
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
 				city.retrieveCovidData();
 				city.setDataSource(dataSource);				
 				return null;
 			}
-			protected void done() {				
+			protected void done() {
+				//System.out.println("Thread finished"); //DEBUG
 				retrieveDataSemaphoreDown();
 			}
 		};
@@ -1378,7 +1391,13 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		separator.setBounds(0, 444, 835, 2);
 		contentPane.add(separator);		
 		
-		countryComboBox.setModel(new DefaultComboBoxModel<>(getAllCountries()));
+		countryComboBox.setModel(new DefaultComboBoxModel<>(createCountriesList()));
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ControllerGUI.class.getResource("/graphics/map-pin.png")));
+		lblNewLabel.setBounds(735, 374, 100, 100);
+		contentPane.add(lblNewLabel);
+		
 		
 		setDefaultFeaturesInTextfields();
 		customFeaturesDisable();

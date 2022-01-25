@@ -27,7 +27,7 @@ public class DateAddedFrame extends JFrame {
 	 */
 	public DateAddedFrame(Object[][] data) {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/MainIcon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/globe.png")));
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
