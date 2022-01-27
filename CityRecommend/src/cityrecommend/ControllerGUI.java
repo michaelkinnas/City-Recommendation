@@ -128,7 +128,6 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 	private DateAddedFrame dateFrame;  
 	private JComboBox<String> countryComboBox;
-
 	
 	private JTable previewItems;
 	private JTable recommendedItems;
@@ -136,8 +135,6 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	private JScrollPane scrollPane;
 	private JSeparator separator_1_1;
 	private JSeparator separator;
-	//private TreeMap<String, String> hashMapSorted;	
-	//private String[] sortedCountriesList;	
 	private HashMap<String, String> countryCodesAndNamesLookUp;
 	private JLabel lblNewLabel;
 
@@ -427,36 +424,30 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	}
 
 	/**
-	 * It calls all data APIs for a given City object using a thread with SwingWorker 
+	 * Deliverable	4.1, Thread pools
+	 * It calls all data APIs for a given City object using threads with SwingWorker 
 	 * @param City object
 	 * @param A String[] array of the keywords for the terms
 	 * @param An integer for the dataSource used (1 or 2)
 	 */
 	private synchronized void retrieveCityData(City city, String[] terms, int dataSource) {
-		//LOGGER.log(Level.FINE, "Started retrieve data thread.");
-		
+		LOGGER.log(Level.FINE, "Started retrieve data thread.");		
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
-			protected Void doInBackground() throws Exception {
-				//System.out.println("Started thread for " + city.getCityName());			//DEBUG	
-				
+			protected Void doInBackground() throws Exception {								
 				city.setTerms(terms);
-				city.retrieveFeatureScore();							
-				
-				
-				
-				
+				city.retrieveFeatureScore();				
 				return null;
 			}
-			protected void done() {
-				//System.out.println("Thread finished"); //DEBUG
-				city.setDataSource(dataSource);
+			
+			protected void done() {							
 				try {
 					city.retrieveCovidData();
 				} catch (IOException | InterruptedException | AmadeusErrorException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					//e.printStackTrace();
 				}
+				city.setDataSource(dataSource);
 				retrieveDataSemaphoreDown();
 			}
 		};
@@ -468,8 +459,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * and also disables the recommend button and sets status label accordingly.
 	 */
 	private synchronized void retrieveDataSemaphoreUp() {
-		this.retrieveDataSemaphore++;
-		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
+		this.retrieveDataSemaphore++;		
 		this.btnRecommend.setEnabled(false);	
 		this.lblStatus.setText("Please wait, working...");
 	}
@@ -481,7 +471,6 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreDown() {
 		this.retrieveDataSemaphore--; //if retrieve data threads have finished run the recommendation perceptrons		
-		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		if (retrieveDataSemaphore == 0) {
 			makeRecommendations();
 			sortRecommendations(new ScoreCompare().reversed());
@@ -554,10 +543,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			}			
 			System.out.println();
 			
-		}*/
-		
-		
-		
+		}*/		
 
 	}
 
@@ -1147,8 +1133,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		infoArrayList.add("Goverment site link: " + city.getCovidData().getData().getDataSources().getGovernmentSiteLink() +"\n");
 		infoArrayList.add("Health department site link: " + city.getCovidData().getData().getDataSources().getHealthDepartementSiteLink() +"\n\n");			
 
-		infoArrayList.removeAll(Collections.singleton(null)); //THIS FUCKING SHIT FUCK OFF BITCH		
+		infoArrayList.removeAll(Collections.singleton(null));
 
+		//Deliverable 4.2 Lambda, Streams
 		List<String> filteredElements = infoArrayList.stream().map(string -> string.replace("null", ""))
 				.map(string -> string.replace("</p>", ""))
 				.map(string -> string.replace("<p>", ""))
