@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -52,6 +51,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import comparators.GeodesicCompare;
 import comparators.ScoreCompare;
 import comparators.TimestampCompare;
+import exceptions.AmadeusErrorException;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -59,6 +59,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
+import javax.swing.ImageIcon;
 
 
 public class ControllerGUI extends JFrame implements MouseInputListener, ActionListener, WindowListener {
@@ -68,6 +69,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	private static final long serialVersionUID = -8395609496282147027L;	
 	private static final String[] DEFAULT_TERMS = new String[] {"bar","beach","restaurant","museum","hotel","transport","temple"};
 	private static final String FILEPATH = "backup.json";
+	private static final Logger LOGGER = Logger.getLogger(ControllerGUI.class.getName());
 
 	private ArrayList<City> cities = new ArrayList<>();
 
@@ -124,19 +126,20 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	private File saveFile;
 	private JComboBox<String> comboBoxSorting;
 
-	private DateAdded dateFrame;  
+	private DateAddedFrame dateFrame;  
 	private JComboBox<String> countryComboBox;
 
-	private static final Logger LOGGER = Logger.getLogger(ControllerGUI.class.getName());
+	
 	private JTable previewItems;
 	private JTable recommendedItems;
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane;
 	private JSeparator separator_1_1;
 	private JSeparator separator;
-	private TreeMap<String, String> hashMapSorted;	
+	//private TreeMap<String, String> hashMapSorted;	
 	//private String[] sortedCountriesList;	
 	private HashMap<String, String> countryCodesAndNamesLookUp;
+	private JLabel lblNewLabel;
 
 
 	/**
@@ -148,15 +151,14 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	public ControllerGUI() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {	
 		Handler fileHandler  = null;
-		Handler consoleHandler  = null;
-		createCountriesCodeHashMapLookUpTable();		
-
-		hashMapSorted = makeHashMapSorted(hashMapSorted);
+		Handler consoleHandler  = null;		
+		//hashMapSorted = makeHashMapSorted(hashMapSorted);
 
 		try {
 			//Creating consoleHandler and fileHandler
 			consoleHandler = new ConsoleHandler();
-			fileHandler  = new FileHandler("./log.txt");
+			fileHandler  = new FileHandler("./log.xml", true);
+			
 
 			//Assigning handlers to LOGGER object
 			LOGGER.addHandler(consoleHandler);
@@ -175,11 +177,16 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		} catch (IOException exception) {
 			LOGGER.log(Level.SEVERE, "Error occur in FileHandler.", exception);
 		}
-
-		drawGUI2();
+		
+		//Draw interface and set initial condition
+		createCountriesCodeHashMapLookUpTable();
+		drawGraphicalInterface();		
+		setDefaultComboBoxImportance();
+		setDefaultFeaturesInTextfields();
+		customFeaturesDisable();
+		
 		cvframe = new CovidFrame();
 		LOGGER.log(Level.FINE, "Drew interface");
-
 
 		LOGGER.log(Level.FINE, "Trying to read from file.");
 		saveFile = new File(FILEPATH);
@@ -221,7 +228,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				LOGGER.log(Level.WARNING, "Clicked Recommend button without adding cities.");	
 			} else if (chckbxCustomRecommendation.isSelected() && allKeywordsAreNotFilled()) {
 				JOptionPane.showMessageDialog(null, "You must fill all interest fields.", "Interest fields are empty", JOptionPane.WARNING_MESSAGE);			
-			} else {			
+			} else {				
 				for (City city: cities) {					
 					if (chckbxCustomRecommendation.isSelected() && !(city.getDataSource() == 2)) {
 						LOGGER.log(Level.FINE, "Retrieving data for cities.");						
@@ -232,12 +239,12 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 						retrieveDataSemaphoreUp();						
 						retrieveCityData(city, DEFAULT_TERMS, 1);
 					}
-				}
-
+				}				
+				 
 				//STILL TESTING
 				if (retrieveDataSemaphore == 0) {
 					makeRecommendations();
-					sortRecommendations(new ScoreCompare());//not reversed()
+					sortRecommendations(new ScoreCompare().reversed());
 					displayResults();		
 				}
 			}
@@ -262,13 +269,13 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		if (e.getSource() == btnAdd) {
 			LOGGER.log(Level.FINE, "Clicked Add button.");
 			createCitySemaphoreUp();
-                        
-                        String citySelected = textFieldCityName.getText().trim();//get string text of selected city
-                        //Change input citySelected with capitalized first letter and lower case for the rest
-                        if (!citySelected.isBlank()) {
-                            citySelected = citySelected.substring(0,1).toUpperCase() + citySelected.substring(1).toLowerCase();
-                        }
-			addCity(citySelected, hashMapSorted.get(countryComboBox.getSelectedItem().toString()));
+	
+			if (countryComboBox.getSelectedItem().toString().equals("-")) {
+				addCity(textFieldCityName.getText(), "");				
+			} else {
+				addCity(textFieldCityName.getText(), countryComboBox.getSelectedItem().toString().split(", ")[1]);
+			}			
+			
 			textFieldCityName.setText("");
 			countryComboBox.setSelectedIndex(0);
 			textFieldCityName.requestFocus();
@@ -309,7 +316,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				i++;
 			}			
 
-			dateFrame = new DateAdded(data);
+			dateFrame = new DateAddedFrame(data);
 			dateFrame.setVisible(true);
 		}
 
@@ -321,22 +328,6 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				JOptionPane.showMessageDialog(null, "You must select a city first.", "No city selected", JOptionPane.WARNING_MESSAGE);
 				LOGGER.log(Level.WARNING, "Clicked COVID info button without selecting cities.");
 			} else {
-                            ///it22165 START
-                            if (comboBoxSorting.getSelectedIndex() == 0) {
-                                    cities.sort(new ScoreCompare());
-                            } else if (comboBoxSorting.getSelectedIndex() == 1) {
-                                    cities.sort(new ScoreCompare().reversed());	
-                            } else if (comboBoxSorting.getSelectedIndex() == 2) {
-                                    cities.sort(new GeodesicCompare());	
-                            } else if (comboBoxSorting.getSelectedIndex() == 3) {
-                                    cities.sort(new GeodesicCompare().reversed());
-                            } else if (comboBoxSorting.getSelectedIndex() == 4) {
-                                    cities.sort(new TimestampCompare());
-                            } else if (comboBoxSorting.getSelectedIndex() == 5) {
-                                    cities.sort(new TimestampCompare().reversed());
-                            }
-                            displayResults();			
-                            //it22165 END
 				cvframe.setTextAreaText("");
 				City city;// = recommendedYoung.get(0);
 				if (chckbxCustomRecommendation.isSelected()) {
@@ -374,7 +365,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	}
 
 
-
+	/**
+	 * Returns true if at least one of the custom keywords text fields is empty.
+	 * @return Boolean
+	 */
 	private boolean allKeywordsAreNotFilled() {
 		if (textField1.getText().equals("") || textField2.getText().equals("") || textField3.getText().equals("") ||
 			textField4.getText().equals("") || textField5.getText().equals("") || textField6.getText().equals("") || 
@@ -383,7 +377,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Sets importance levels of combo boxes
+	 */
 	private void restoreUserSelectedImportanceSettings() {
 		comboBox1.setSelectedIndex(weightsToImportanceLevel(0));
 		comboBox2.setSelectedIndex(weightsToImportanceLevel(1));
@@ -394,7 +391,13 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBox7.setSelectedIndex(weightsToImportanceLevel(6));
 
 	}
-
+	
+	/**
+	 * Converts from decimal number of the term bias to the 5 point integer index
+	 * used by importance combo boxes
+	 * @param The index of the term bias
+	 * @return An integer from 0 to 4
+	 */
 	private int weightsToImportanceLevel(int index) {		
 		if (customTermsBias[index] == 1) {
 			return 0; 
@@ -409,7 +412,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}	
 
 	}
-
+	
+	/**
+	 * Sets the text in the custom keyword text fields according to custom terms vector
+	 */
 	private void restoreUserSelectedFeaturesInTextfields() {	
 		textField1.setText(customTerms[0]);
 		textField2.setText(customTerms[1]);
@@ -426,20 +432,31 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * @param A String[] array of the keywords for the terms
 	 * @param An integer for the dataSource used (1 or 2)
 	 */
-	private void retrieveCityData(City city, String[] terms, int dataSource) {
-		LOGGER.log(Level.FINE, "Started retrieve data thread.");
+	private synchronized void retrieveCityData(City city, String[] terms, int dataSource) {
+		//LOGGER.log(Level.FINE, "Started retrieve data thread.");
+		
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				//System.out.println("Started thread for " + city.getCityName());			//DEBUG	
+				
 				city.setTerms(terms);
 				city.retrieveFeatureScore();							
-				city.retrieveCovidData();
-				city.setDataSource(dataSource);				
+				
+				
+				
+				
 				return null;
 			}
 			protected void done() {
 				//System.out.println("Thread finished"); //DEBUG
+				city.setDataSource(dataSource);
+				try {
+					city.retrieveCovidData();
+				} catch (IOException | InterruptedException | AmadeusErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				retrieveDataSemaphoreDown();
 			}
 		};
@@ -452,7 +469,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreUp() {
 		this.retrieveDataSemaphore++;
-		System.out.println("Semaphore is now " + retrieveDataSemaphore);
+		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		this.btnRecommend.setEnabled(false);	
 		this.lblStatus.setText("Please wait, working...");
 	}
@@ -464,7 +481,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 */
 	private synchronized void retrieveDataSemaphoreDown() {
 		this.retrieveDataSemaphore--; //if retrieve data threads have finished run the recommendation perceptrons		
-		System.out.println("Semaphore is now " + retrieveDataSemaphore);
+		//System.out.println("Semaphore is now " + retrieveDataSemaphore);
 		if (retrieveDataSemaphore == 0) {
 			makeRecommendations();
 			sortRecommendations(new ScoreCompare().reversed());
@@ -507,7 +524,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 					data[i][1] = countryCodesAndNamesLookUp.get(recommendedYoung.get(i).getCountryCode()); 					
 				}
 				DefaultTableModel table = new DefaultTableModel(data, new String[] {"City", "Country"});
-				recommendedItems.setModel(table);
+				recommendedItems.setModel(table);				
 			} else if (comboBoxAgeRange.getSelectedIndex() == 1) {				
 				Object[][] data = new Object[recommendedMiddle.size()][2];	
 				for (int i = 0; i < recommendedMiddle.size(); i++) {
@@ -526,22 +543,28 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				recommendedItems.setModel(table);
 			}
 		}
-
+		
+		//FOR DEBUGGING
+		//Prints the score vector of each city
+		/*
 		for(City city: cities) {
-			System.out.println(city.getCityName() + " data source: " + city.getDataSource());
+			System.out.print(city.getCityName() + " data source: " + city.getDataSource() + ": ");
 			for (int i =0; i < city.getVectorRepresentation().length; i++) {
 				System.out.printf("%.2f, ", city.getVectorRepresentation()[i]);
-
-			}
+			}			
 			System.out.println();
-		}
+			
+		}*/
+		
+		
+		
 
 	}
 
 
 	/**
 	 * Creates PerceptronTraveller objects and calls their recommend methods
-	 * for all Preceptrons.
+	 * for all Perceptrons.
 	 */
 	private void makeRecommendations() {
 		if (chckbxCustomRecommendation.isSelected()) {
@@ -589,7 +612,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 			displayResults();			
 		}		
 	}
-
+	
+	/**
+	 * Clears all custom text fields.
+	 */
 	private void emptyCustomizedTextfields() {		
 		textField1.setText("");
 		textField2.setText("");
@@ -600,7 +626,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		textField7.setText("");		
 	}
 
-
+	/**
+	 * It disables all 7 custom text fields and custom importance levels combo boxes
+	 */
 	public void customFeaturesDisable() {		
 		textField1.setEnabled(false);
 		textField2.setEnabled(false);
@@ -617,7 +645,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBox6.setEnabled(false);
 		comboBox7.setEnabled(false);
 	}
-
+	
+	/**
+	 * It enables all 7 custom text fields and all 7 custom importance level comboboxes
+	 */
 	public void customFeaturesEnable() {
 		textField1.setEnabled(true);
 		textField2.setEnabled(true);
@@ -770,7 +801,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		}
 	}
 
-	private String[] getAllCountries() {//consider argument String[] array
+	private String[] createCountriesList() {//consider argument String[] array
 		//Create String array to save countries' names from list of countries created with Locale
 		String[] countries = new String[Locale.getISOCountries().length+1];
 		//Create list of all countries (initials-code and name) defined in ISO 3166 with Locale
@@ -785,27 +816,24 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		return countries;
 	}
 
-	
+	/**
+	 * It creates a Hashmap used to lookup the country full name given a country two letter code
+	 */
 	private void createCountriesCodeHashMapLookUpTable() {		
 		String[] CountryISOList = Locale.getISOCountries();
 		countryCodesAndNamesLookUp = new HashMap<>();
 		ArrayList<String> temp = new ArrayList<>();
 		
-		temp.add("-");
 		for (int i =0; i < CountryISOList.length; i++) {
 			Locale locale = new Locale("", CountryISOList[i]);			
 			countryCodesAndNamesLookUp.put(locale.getCountry(), locale.getDisplayCountry(Locale.ENGLISH));
 			temp.add(locale.getDisplayCountry(Locale.ENGLISH) + ", " + locale.getCountry());
 		}		
 		Collections.sort(temp);		
-		//sortedCountriesList = temp.toArray(sortedCountriesList);		
-		/*
-		for (Entry<String, String> entry: countryCodesAndNamesLookUp.entrySet()) {
-			System.out.println(entry.getKey() + " " + entry.getValue());			
-		}*/			
 	}	
 	
-
+	
+	/*
 	private TreeMap<String, String> makeHashMapSorted(TreeMap<String, String> inputHashMap) {
 		//create HashMap of countries and codes with Locale
 		HashMap<String, String> countriesNameCode = new HashMap<>();
@@ -816,7 +844,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		//sort HashMap with TreeMap
 		TreeMap<String, String> hashMapSorted = new TreeMap<>(countriesNameCode);
 		return (inputHashMap = hashMapSorted);//????
-	}
+	}*/
 
 
 	/**
@@ -855,7 +883,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		ArrayList<City> cities = mapper.readValue(filename, new TypeReference<ArrayList<City>>(){});		
 		return cities;    
 	}
-
+	
+	/**
+	 * Sets default features in the custom text fields
+	 */
 	public void setDefaultFeaturesInTextfields() {        
 		textField1.setText(DEFAULT_TERMS[0]);
 		textField2.setText(DEFAULT_TERMS[1]);
@@ -865,7 +896,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		textField6.setText(DEFAULT_TERMS[5]);
 		textField7.setText(DEFAULT_TERMS[6]);
 	}
-
+	
+	/**
+	 * Sets default combo box importance level
+	 */
 	private void setDefaultComboBoxImportance() {
 		comboBox1.setSelectedIndex(setCategoryAccordingToWeights(0));
 		comboBox2.setSelectedIndex(setCategoryAccordingToWeights(1));
@@ -894,7 +928,7 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		int category = 2;
 
-		if (weights[index] > -1.0) {
+		if (weights[index] >= -1.0) {
 			category = 4;
 		} 
 		if (weights[index] > -1.0) {
@@ -1091,28 +1125,26 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 
 		infoArrayList.add("\n");
 
-		//infoarray.add("Area vaccinated: " + city.getCovidData().getData().getAreaVaccinated() +"\n\n";
-		infoArrayList.add("AREA VACCINATED:\n");
 		/*
+		infoArrayList.add("AREA VACCINATED:\n");
+		
 		if (city.getCovidData().getData().getAreaVaccinated() != null) {
 			for (int i = 0; i <city.getCovidData().getData().getAreaVaccinated().size(); i++) {			
 				infoArrayList.add(city.getCovidData().getData().getAreaVaccinated().get(i).getDate());
 				infoArrayList.add("\n");
-
 				infoArrayList.add(city.getCovidData().getData().getAreaVaccinated().get(i).getText());
 				infoArrayList.add(" ");
-
 				infoArrayList.add("\n");
 			}
-		}*/
-
+		}
 		infoArrayList.add("\n");
+		*/
 
 		infoArrayList.add("Data sources covid dashboard link: " + city.getCovidData().getData().getDataSources().getCovidDashboardLink() +"\n");
 		infoArrayList.add("Goverment site link: " + city.getCovidData().getData().getDataSources().getGovernmentSiteLink() +"\n");
 		infoArrayList.add("Health department site link: " + city.getCovidData().getData().getDataSources().getHealthDepartementSiteLink() +"\n\n");			
 
-		infoArrayList.removeAll(Collections.singleton(null)); //CHECK OUT AGAIN		
+		infoArrayList.removeAll(Collections.singleton(null)); //THIS FUCKING SHIT FUCK OFF BITCH		
 
 		List<String> filteredElements = infoArrayList.stream().map(string -> string.replace("null", ""))
 				.map(string -> string.replace("</p>", ""))
@@ -1123,6 +1155,10 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 				.map(string -> string.replace("</a>", ""))
 				.map(string -> string.replace("<span>", ""))
 				.map(string -> string.replace("</span>", ""))
+				.map(string -> string.replace("<ul>", ""))
+				.map(string -> string.replace("<li>", ""))
+				.map(string -> string.replace("</li>", ""))
+				.map(string -> string.replace("</ul>", ""))
 				.collect(Collectors.toList());
 
 		String filteredStr = filteredElements.stream().filter(string -> !string.isEmpty()).collect(Collectors.joining());
@@ -1137,11 +1173,12 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 	 * @throws IllegalAccessException
 	 * @throws UnsupportedLookAndFeelException
 	 */
-	private void drawGUI2() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	private void drawGraphicalInterface() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		setResizable(false);
-		setTitle("City Recommend");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/MainIcon.png")));
-		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		setTitle("City Recommend v1.01");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ControllerGUI.class.getResource("/graphics/globe.png")));
+		//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		addWindowListener(this);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1158,9 +1195,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBoxAgeRange.addActionListener(this);
 		contentPane.add(comboBoxAgeRange);
 
-		JLabel labelAge = new JLabel("Age group");
+		JLabel labelAge = new JLabel("Age group:");
 
-		labelAge.setBounds(276, 12, 56, 16);
+		labelAge.setBounds(280, 13, 54, 14);
 		contentPane.add(labelAge);
 
 		textFieldCityName = new JTextField();
@@ -1169,9 +1206,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		contentPane.add(textFieldCityName);
 		textFieldCityName.setColumns(10);
 
-		JLabel labelChooseCity = new JLabel("City name");
+		JLabel labelChooseCity = new JLabel("City name:");
 
-		labelChooseCity.setBounds(42, 12, 54, 16);
+		labelChooseCity.setBounds(46, 13, 52, 14);
 		contentPane.add(labelChooseCity);
 
 		countryComboBox = new JComboBox<>();
@@ -1179,9 +1216,9 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		countryComboBox.setBounds(108, 43, 147, 24);
 		contentPane.add(countryComboBox);
 
-		JLabel labelChooseCountry = new JLabel("Country");
+		JLabel labelChooseCountry = new JLabel("Country (optional):");
 
-		labelChooseCountry.setBounds(52, 46, 43, 16);
+		labelChooseCountry.setBounds(6, 48, 92, 14);
 		contentPane.add(labelChooseCountry);
 
 		btnAdd = new JButton("Add");
@@ -1269,37 +1306,37 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		separator_1_1.setBounds(531, 0, 9, 444);
 		contentPane.add(separator_1_1);
 
-		chckbxCustomRecommendation = new JCheckBox("Customize criteria");
+		chckbxCustomRecommendation = new JCheckBox("Customize criteria:");
 		chckbxCustomRecommendation.setBounds(548, 77, 121, 25);
 		chckbxCustomRecommendation.addMouseListener(this);
 		contentPane.add(chckbxCustomRecommendation);
 
-		JLabel lblNewLabel_1 = new JLabel("Feature 1");
-		lblNewLabel_1.setBounds(554, 141, 48, 16);
+		JLabel lblNewLabel_1 = new JLabel("Feature 1:");
+		lblNewLabel_1.setBounds(554, 141, 51, 14);
 		contentPane.add(lblNewLabel_1);
 
-		JLabel lblNewLabel_1_1 = new JLabel("Feature 2");
-		lblNewLabel_1_1.setBounds(554, 171, 48, 16);
+		JLabel lblNewLabel_1_1 = new JLabel("Feature 2:");
+		lblNewLabel_1_1.setBounds(554, 171, 51, 14);
 		contentPane.add(lblNewLabel_1_1);
 
-		JLabel lblNewLabel_1_2 = new JLabel("Feature 3");
-		lblNewLabel_1_2.setBounds(554, 202, 48, 16);
+		JLabel lblNewLabel_1_2 = new JLabel("Feature 3:");
+		lblNewLabel_1_2.setBounds(554, 202, 51, 14);
 		contentPane.add(lblNewLabel_1_2);
 
-		JLabel lblNewLabel_1_3 = new JLabel("Feature 4");
-		lblNewLabel_1_3.setBounds(554, 233, 48, 16);
+		JLabel lblNewLabel_1_3 = new JLabel("Feature 4:");
+		lblNewLabel_1_3.setBounds(554, 233, 51, 14);
 		contentPane.add(lblNewLabel_1_3);
 
-		JLabel lblNewLabel_1_4 = new JLabel("Feature 5");
-		lblNewLabel_1_4.setBounds(554, 264, 48, 16);
+		JLabel lblNewLabel_1_4 = new JLabel("Feature 5:");
+		lblNewLabel_1_4.setBounds(554, 264, 51, 14);
 		contentPane.add(lblNewLabel_1_4);
 
-		JLabel lblNewLabel_1_5 = new JLabel("Feature 6");
-		lblNewLabel_1_5.setBounds(554, 295, 48, 16);
+		JLabel lblNewLabel_1_5 = new JLabel("Feature 6:");
+		lblNewLabel_1_5.setBounds(554, 295, 51, 14);
 		contentPane.add(lblNewLabel_1_5);
 
-		JLabel lblNewLabel_1_6 = new JLabel("Feature 7");
-		lblNewLabel_1_6.setBounds(554, 326, 48, 16);
+		JLabel lblNewLabel_1_6 = new JLabel("Feature 7:");
+		lblNewLabel_1_6.setBounds(554, 326, 51, 14);
 		contentPane.add(lblNewLabel_1_6);
 
 		textField1 = new JTextField();
@@ -1374,17 +1411,17 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		comboBox7.setBounds(742, 322, 78, 22);
 		contentPane.add(comboBox7);
 
-		btnDateTable = new JButton("Date Added");
+		btnDateTable = new JButton("Days added");
 		btnDateTable.setBounds(543, 409, 95, 25);
 		btnDateTable.addMouseListener(this);
 		contentPane.add(btnDateTable);
 
 		lblNewLabel_2 = new JLabel("Importance");
-		lblNewLabel_2.setBounds(742, 111, 61, 16);
+		lblNewLabel_2.setBounds(742, 118, 55, 14);
 		contentPane.add(lblNewLabel_2);
 
-		lblNewLabel_3 = new JLabel("Interest");
-		lblNewLabel_3.setBounds(649, 111, 39, 16);
+		lblNewLabel_3 = new JLabel("Interests");
+		lblNewLabel_3.setBounds(614, 117, 44, 14);
 		contentPane.add(lblNewLabel_3);
 
 		separator = new JSeparator();
@@ -1399,8 +1436,6 @@ public class ControllerGUI extends JFrame implements MouseInputListener, ActionL
 		contentPane.add(lblNewLabel);
 		
 		
-		setDefaultFeaturesInTextfields();
-		customFeaturesDisable();
 	}
 
 	@Override

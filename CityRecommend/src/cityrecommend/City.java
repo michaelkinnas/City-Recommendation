@@ -92,13 +92,13 @@ public class City {
 	 * @throws AmadeusErrorException
 	 */
 	public void retrieveCovidData() throws IOException, InterruptedException, AmadeusErrorException {		
-		//String client_id_22046 = "IAAOZ01yvqsGryfjLV3M2huurSACX6sr";
-		//String client_secret_22046 = "TY2OztMIIaDMRMUx";			
-		String client_id_22039 = "oUH4ATXGGKxJZlLOTm3fODGJTSnAfhzG";
-		String client_secret_22039 = "KH4EL4AmhjepN0Bx";
+		String client_id_22046 = "IAAOZ01yvqsGryfjLV3M2huurSACX6sr";
+		String client_secret_22046 = "TY2OztMIIaDMRMUx";			
+		//String client_id_22039 = "oUH4ATXGGKxJZlLOTm3fODGJTSnAfhzG";
+		//String client_secret_22039 = "KH4EL4AmhjepN0Bx";
 
-		String client_id = client_id_22039;
-		String client_secret = client_secret_22039;
+		String client_id = client_id_22046;
+		String client_secret = client_secret_22046;
 
 		Thread.sleep(150);
 
